@@ -9,16 +9,18 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.weblib.db.DatabaseConnector;
+import com.weblib.db.Query;
 
 public abstract class AbstractDAO {
 	
-	public List<Object> genericSelect(String query) throws SQLException {
+	public List<Object> genericSelect(Query query) {
 		List<Object> list = new ArrayList<Object>();
 		try {
-			Connection connection = DatabaseConnector.INSTANCE.getConnection();
+			DatabaseConnector.INSTANCE.connect();
+			Connection connection = DatabaseConnector.getConnection();
 			if (connection != null) {
 				Statement statement = connection.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
-				ResultSet resultSet = statement.executeQuery(query);
+				ResultSet resultSet = statement.executeQuery(query.getQuery());
 				ResultSetMetaData meta = resultSet.getMetaData();
 				
 				while (resultSet.next()) {

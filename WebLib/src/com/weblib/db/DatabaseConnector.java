@@ -14,11 +14,7 @@ public enum DatabaseConnector {
 	
 	private static Connection connection = null;
 	
-	private DatabaseConnector() {
-		connect();
-	}
-	
-	private void connect() {
+	public void connect() {
 		try {
 			Class.forName("com.sybase.jdbc3.jdbc.SybDriver");
 		} catch (ClassNotFoundException e) {
@@ -27,6 +23,7 @@ public enum DatabaseConnector {
 
 		try {
 			connection = DriverManager.getConnection(CONN_STRING, USERNAME, PASSWORD);
+			System.out.println(connection);
 			Logger.getLogger("LOG").info("Connected.");
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -48,7 +45,7 @@ public enum DatabaseConnector {
 		return connection != null && !connection.isClosed();
 	}
 	
-	public Connection getConnection() {
+	public static Connection getConnection() {
 		return connection;
 	}
 	
