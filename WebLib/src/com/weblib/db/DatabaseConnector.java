@@ -13,7 +13,6 @@ public enum DatabaseConnector {
 	private static final String PASSWORD = "dba";
 	
 	private static Connection connection = null;
-	private static boolean isConnected = false; 
 	
 	private DatabaseConnector() {
 		connect();
@@ -22,15 +21,13 @@ public enum DatabaseConnector {
 	private void connect() {
 		try {
 			Class.forName("com.sybase.jdbc3.jdbc.SybDriver");
-		} catch (ClassNotFoundException e1) {
-			e1.printStackTrace();
+		} catch (ClassNotFoundException e) {
+			e.printStackTrace();
 		}
 
 		try {
 			connection = DriverManager.getConnection(CONN_STRING, USERNAME, PASSWORD);
-			isConnected = true;
 			Logger.getLogger("LOG").info("Connected.");
-		
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -40,7 +37,6 @@ public enum DatabaseConnector {
 		if (connection != null) {
 			try {
 				connection.close();
-				isConnected = false;
 				Logger.getLogger("LOG").info("Disconnected.");
 			} catch (SQLException e) {
 				e.printStackTrace();
@@ -48,8 +44,8 @@ public enum DatabaseConnector {
 		}
 	}
 	
-	public boolean isConnected() {
-		return isConnected;
+	public boolean isConnected() throws SQLException {
+		return connection != null && !connection.isClosed();
 	}
 	
 	public Connection getConnection() {
