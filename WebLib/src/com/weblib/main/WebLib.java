@@ -8,7 +8,6 @@ import com.weblib.db.DatabaseConnector;
 public class WebLib {
 	
 	public static void main(String[] args) {
-		Logger.getLogger("LOG").info("Getting data source...");
 		Connection connection = DatabaseConnector.INSTANCE.getConnection();
 	}
 	

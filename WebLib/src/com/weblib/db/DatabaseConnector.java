@@ -6,8 +6,6 @@ import java.util.logging.Logger;
 
 import com.sybase.jdbc3.jdbc.SybDataSource;
 
-
-// singleton
 public enum DatabaseConnector {
 	INSTANCE;
 	
@@ -23,16 +21,14 @@ public enum DatabaseConnector {
 	}
 	
 	private void connect() {
-		if (connection != null) {
-			try {
-				mainDataSource = getDataSource(USERNAME, PASSWORD, 2638);
-				connection = mainDataSource.getConnection();
-				isConnected = true;
-				Logger.getLogger("DatabaseConnector").info("Connected.");
-				
-			} catch (SQLException e) {
-				e.printStackTrace();
-			}
+		try {
+			mainDataSource = getDataSource(USERNAME, PASSWORD, 2638);
+			connection = mainDataSource.getConnection();
+			isConnected = true;
+			Logger.getLogger("DatabaseConnector").info("Connected.");
+
+		} catch (SQLException e) {
+			e.printStackTrace();
 		}
 	}
 	
