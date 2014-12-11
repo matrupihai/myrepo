@@ -1,7 +1,6 @@
 package com.weblib.main;
 
 import java.sql.Connection;
-import java.util.logging.Logger;
 
 import com.weblib.db.DatabaseConnector;
 

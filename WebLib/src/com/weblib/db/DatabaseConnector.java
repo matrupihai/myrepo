@@ -1,19 +1,18 @@
 package com.weblib.db;
 
 import java.sql.Connection;
+import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.logging.Logger;
-
-import com.sybase.jdbc3.jdbc.SybDataSource;
 
 public enum DatabaseConnector {
 	INSTANCE;
 	
-	private static final String USERNAME = "DBA";
-	private static final String PASSWORD = "dba";
+	private static final String CONN_STRING = "jdbc:sybase:Tds:localhost:2638";
+	private static final String USERNAME = "";
+	private static final String PASSWORD = "";
 	
 	private static Connection connection = null;
-	private static SybDataSource mainDataSource = null;
 	private static boolean isConnected = false; 
 	
 	private DatabaseConnector() {
@@ -22,23 +21,19 @@ public enum DatabaseConnector {
 	
 	private void connect() {
 		try {
-			mainDataSource = getDataSource(USERNAME, PASSWORD, 2638);
-			connection = mainDataSource.getConnection();
+			Class.forName("com.sybase.jdbc3.jdbc.SybDriver");
+		} catch (ClassNotFoundException e1) {
+			e1.printStackTrace();
+		}
+
+		try {
+			connection = DriverManager.getConnection(CONN_STRING, USERNAME, PASSWORD);
 			isConnected = true;
 			Logger.getLogger("DatabaseConnector").info("Connected.");
-
+		
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-	}
-	
-	private static SybDataSource getDataSource(String user, String pass, int portNumber) {
-		SybDataSource source = new SybDataSource();
-		source.setUser(user);
-		source.setPassword(pass);
-		source.setPortNumber(portNumber);
-		
-		return source;
 	}
 	
 	public void disconnect() {
