@@ -11,8 +11,8 @@ import com.sybase.jdbc3.jdbc.SybDataSource;
 public enum DatabaseConnector {
 	INSTANCE;
 	
-	private static final String USERNAME = "dba";
-	private static final String PASSWORD = "@#45dba^&89";
+	private static final String USERNAME = "DBA";
+	private static final String PASSWORD = "dba";
 	
 	private static Connection connection = null;
 	private static SybDataSource mainDataSource = null;
