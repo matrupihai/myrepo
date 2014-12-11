@@ -23,7 +23,6 @@ public enum DatabaseConnector {
 
 		try {
 			connection = DriverManager.getConnection(CONN_STRING, USERNAME, PASSWORD);
-			System.out.println(connection);
 			Logger.getLogger("LOG").info("Connected.");
 		} catch (SQLException e) {
 			e.printStackTrace();
