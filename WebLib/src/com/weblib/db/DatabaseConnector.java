@@ -8,9 +8,9 @@ import java.util.logging.Logger;
 public enum DatabaseConnector {
 	INSTANCE;
 	
-	private static final String CONN_STRING = "jdbc:sybase:Tds:localhost:2638";
-	private static final String USERNAME = "";
-	private static final String PASSWORD = "";
+	private static final String CONN_STRING = "jdbc:sybase:Tds:localhost:2639";
+	private static final String USERNAME = "DBA";
+	private static final String PASSWORD = "dba";
 	
 	private static Connection connection = null;
 	private static boolean isConnected = false; 
