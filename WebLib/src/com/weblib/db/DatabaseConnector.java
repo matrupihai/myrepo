@@ -29,7 +29,7 @@ public enum DatabaseConnector {
 		try {
 			connection = DriverManager.getConnection(CONN_STRING, USERNAME, PASSWORD);
 			isConnected = true;
-			Logger.getLogger("DatabaseConnector").info("Connected.");
+			Logger.getLogger("LOG").info("Connected.");
 		
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -37,11 +37,11 @@ public enum DatabaseConnector {
 	}
 	
 	public void disconnect() {
-		if (connection != null){
+		if (connection != null) {
 			try {
 				connection.close();
 				isConnected = false;
-				Logger.getLogger("DatabaseConnector").info("Disconnected.");
+				Logger.getLogger("LOG").info("Disconnected.");
 			} catch (SQLException e) {
 				e.printStackTrace();
 			}
