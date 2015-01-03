@@ -8,7 +8,7 @@ import com.weblib.db.Query;
 public class TestDAO extends AbstractDAO {
 	
 	public List<Object> getTestObjects() {
-		Query query = new Query("SELECT * FROM DBA.\"TEST_TABLE\" ");
+		Query query = new Query("SELECT * FROM DBA.\"100_BOOKS\" ");
 		return genericSelect(query);
 	}
 	
