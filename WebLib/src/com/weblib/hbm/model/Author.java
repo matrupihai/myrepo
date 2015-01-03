@@ -5,14 +5,17 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.Table;
 
-@Entity (name="100_AUTHORS")
+@Entity
+@Table (name="DBA.\"100_AUTHORS\"")
 public class Author {
+
 	@Id
 	@GeneratedValue (strategy = GenerationType.IDENTITY)
 	@Column (name="author_id")
 	private int authorId;
-	
+
 	@Column (name="author_name")
 	private String authorName;
 	
@@ -24,6 +27,7 @@ public class Author {
 		this.authorId = authorId;
 	}
 	
+
 	public String getAuthorName() {
 		return authorName;
 	}

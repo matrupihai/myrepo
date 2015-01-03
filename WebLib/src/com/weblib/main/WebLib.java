@@ -7,8 +7,6 @@ import org.hibernate.Session;
 
 import com.weblib.hbm.util.HibernateUtil;
 
-
-
 public class WebLib {
 	
 	public static void main(String[] args) {
