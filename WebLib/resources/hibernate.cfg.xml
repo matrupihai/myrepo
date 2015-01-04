@@ -7,7 +7,7 @@
 <hibernate-configuration>
   <session-factory>
     <property name="hibernate.dialect">org.hibernate.dialect.SybaseDialect</property>
-    <property name="hibernate.connection.driver_class">com.sybase.jdbc3.jdbc.SybDriver</property>
+    <property name="hibernate.connection.driver_class">com.sybase.jdbc4.jdbc.SybDriver</property>
     <property name="hibernate.connection.url">jdbc:sybase:Tds:localhost:2639/library_test</property>
     <property name="hibernate.connection.username">DBA</property>
     <property name="hibernate.connection.password">dba</property>

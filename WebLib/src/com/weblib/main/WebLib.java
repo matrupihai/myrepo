@@ -1,22 +1,18 @@
 package com.weblib.main;
 
-import java.util.List;
-
-import org.hibernate.Query;
-import org.hibernate.Session;
-
-import com.weblib.hbm.util.HibernateUtil;
+import com.weblib.dao.AuthorDAO;
+import com.weblib.hbm.model.Author;
 
 public class WebLib {
 	
 	public static void main(String[] args) {
-		Session session = HibernateUtil.getSessionFactory().openSession();
-		session.beginTransaction();
-		Query query = session.createQuery("from Author");
-		List list = query.list(); 
-		session.close();
+		Author author = new Author();
+		author.setAuthorName("george orwell");
+		new AuthorDAO().insertAuthor(author);
 		
-		System.out.println(list);
+		for (Author a : new AuthorDAO().getAllAuthors()) {
+			System.out.println(a.getAuthorName());
+		}
 	}
 	
 }

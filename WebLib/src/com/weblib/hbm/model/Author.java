@@ -12,8 +12,8 @@ import javax.persistence.Table;
 public class Author {
 
 	@Id
-	@GeneratedValue (strategy = GenerationType.IDENTITY)
 	@Column (name="author_id")
+	@GeneratedValue (strategy = GenerationType.AUTO)
 	private int authorId;
 
 	@Column (name="author_name")
@@ -26,7 +26,6 @@ public class Author {
 	public void setAuthorId(int authorId) {
 		this.authorId = authorId;
 	}
-	
 
 	public String getAuthorName() {
 		return authorName;
