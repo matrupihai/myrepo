@@ -16,5 +16,6 @@
     <property name="show_sql">true</property>
 	
 	<mapping class="com.weblib.hbm.model.Author" />
+	<mapping class="com.weblib.hbm.model.Publisher" />
   </session-factory>
 </hibernate-configuration>

@@ -1,5 +1,7 @@
 package com.weblib.hbm.model;
 
+import java.io.Serializable;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -9,7 +11,7 @@ import javax.persistence.Table;
 
 @Entity
 @Table (name="DBA.\"100_AUTHORS\"")
-public class Author {
+public class Author implements Serializable {
 
 	@Id
 	@Column (name="author_id")
