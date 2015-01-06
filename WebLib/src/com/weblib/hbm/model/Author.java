@@ -19,6 +19,10 @@ public class Author {
 	@Column (name="author_name")
 	private String authorName;
 	
+	public Author() {
+		
+	}
+	
 	public int getAuthorId() {
 		return authorId;
 	}

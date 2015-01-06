@@ -12,6 +12,11 @@ public class AuthorDAO {
 		return author;
 	}
 	
+	public List<Author> insertAuthors(List authors) {
+		dao.insertAll(authors);
+		return authors;
+	}
+	
 	@SuppressWarnings("unchecked")
 	public List<Author> getAllAuthors() {
 		return (List<Author>) dao.findAll(Author.class);
