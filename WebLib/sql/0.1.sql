@@ -9,3 +9,16 @@ CREATE TABLE "DBA"."101_PUBLISHERS" (
 	"publisher_name" VARCHAR(255) NULL,
 	PRIMARY KEY ( "publisher_id" ASC )
 );
+
+CREATE TABLE "DBA"."102_BOOKS" (
+	"isbn" NUMERIC(9,0) NOT NULL DEFAULT AUTOINCREMENT,
+	"title" VARCHAR(255) NULL,
+	"no_of_pages" NUMERIC(9,0) NULL,
+	"year_published" NUMERIC(4,0) NULL,
+	"publisher_id" NUMERIC(9,0) NULL,
+	PRIMARY KEY ( "isbn" ASC )
+);
+
+ALTER TABLE "DBA"."102_BOOKS" ADD CONSTRAINT "FK_102_101_PUBLISHERS" FOREIGN KEY ( "publisher_id" ASC ) REFERENCES "DBA"."101_PUBLISHERS" ( "publisher_id" );
+
+
