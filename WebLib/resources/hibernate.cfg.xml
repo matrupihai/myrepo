@@ -17,5 +17,7 @@
 	
 	<mapping class="com.weblib.hbm.model.Author" />
 	<mapping class="com.weblib.hbm.model.Publisher" />
+	<mapping class="com.weblib.hbm.model.Book" />
+	
   </session-factory>
 </hibernate-configuration>

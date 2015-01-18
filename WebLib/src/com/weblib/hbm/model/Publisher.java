@@ -1,12 +1,16 @@
 package com.weblib.hbm.model;
 
 import java.io.Serializable;
+import java.util.HashSet;
+import java.util.Set;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 @Entity
@@ -19,7 +23,10 @@ public class Publisher implements Serializable {
 	private int publisherId;
 	
 	@Column (name="publisher_name")
-	private int publisherName;
+	private String publisherName;
+	
+	@OneToMany (fetch = FetchType.LAZY, mappedBy = "publisher")
+	private Set<Book> books = new HashSet<Book>();
 	
 	public Publisher() {
 		
@@ -33,12 +40,20 @@ public class Publisher implements Serializable {
 		this.publisherId = publisherId;
 	}
 
-	public int getPublisherName() {
+	public String getPublisherName() {
 		return publisherName;
 	}
 
-	public void setPublisherName(int publisherName) {
+	public void setPublisherName(String publisherName) {
 		this.publisherName = publisherName;
+	}
+
+	public Set<Book> getBooks() {
+		return books;
+	}
+
+	public void setBooks(HashSet<Book> books) {
+		this.books = books;
 	}
 	
 }
