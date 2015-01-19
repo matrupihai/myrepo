@@ -7,8 +7,9 @@ import com.weblib.hbm.model.Publisher;
 public class WebLib {
 	
 	public static void main(String[] args) {
-		insertOneToMany();
-		System.out.println(new PublisherDAOImpl().findAllPublishers());
+		for (Publisher p : new PublisherDAOImpl().findAllPublishers()) {
+			System.out.println(p.getBooks());
+		}
 	}
 	
 //	private static void insertAuthor(String name) {

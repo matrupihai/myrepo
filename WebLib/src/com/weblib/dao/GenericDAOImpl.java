@@ -34,8 +34,6 @@ public class GenericDAOImpl<T, ID> implements GenericDAO<T, ID> {
 				transaction.rollback();
 			}
 			log.error(e);
-		} finally {
-			session.close();
 		}
 	}
 	
@@ -49,9 +47,7 @@ public class GenericDAOImpl<T, ID> implements GenericDAO<T, ID> {
 			list.addAll(query.list()); 
 		} catch (Exception e) {
 			log.error(e);
-		} finally {
-			session.close();
-		}
+		} 
 		
 		return list;
 	}
