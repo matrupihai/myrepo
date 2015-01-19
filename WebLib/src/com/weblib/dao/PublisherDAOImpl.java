@@ -2,6 +2,9 @@ package com.weblib.dao;
 
 import java.util.List;
 
+import org.hibernate.Criteria;
+import org.hibernate.criterion.Restrictions;
+
 import com.weblib.hbm.model.Publisher;
 
 public class PublisherDAOImpl extends GenericDAOImpl<Publisher, Integer> {
@@ -16,4 +19,12 @@ public class PublisherDAOImpl extends GenericDAOImpl<Publisher, Integer> {
 	public List<Publisher> findAllPublishers() {
 		return findAll();
 	}
+	
+    public Publisher findByName(String name) {
+        Criteria crit = getSession().createCriteria(Publisher.class);
+        crit.add(Restrictions.eq("publisherName", name));
+        
+        return (Publisher) crit.uniqueResult();
+    }
+    
 }

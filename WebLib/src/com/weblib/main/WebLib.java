@@ -7,9 +7,7 @@ import com.weblib.hbm.model.Publisher;
 public class WebLib {
 	
 	public static void main(String[] args) {
-		for (Publisher p : new PublisherDAOImpl().findAllPublishers()) {
-			System.out.println(p.getBooks());
-		}
+		System.out.println("ID: " + new PublisherDAOImpl().findByName("Penguin").getPublisherId());
 	}
 	
 //	private static void insertAuthor(String name) {

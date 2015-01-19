@@ -14,6 +14,7 @@ import com.weblib.hbm.util.HibernateUtil;
 
 public class GenericDAOImpl<T, ID> implements GenericDAO<T, ID> {
 	private Logger log = Logger.getLogger(GenericDAOImpl.class);
+	Session session = HibernateUtil.getSessionFactory().openSession();
 	private Class<T> objectType;
 	
 	public GenericDAOImpl() {
@@ -23,7 +24,6 @@ public class GenericDAOImpl<T, ID> implements GenericDAO<T, ID> {
 	}
 	
 	public void insert(T entity) {
-		Session session = HibernateUtil.getSessionFactory().openSession();
 		Transaction transaction = null;
 		try {
 			transaction = session.beginTransaction();
@@ -39,7 +39,6 @@ public class GenericDAOImpl<T, ID> implements GenericDAO<T, ID> {
 	
 	@Override
 	public List<T> findAll() {
-		Session session = HibernateUtil.getSessionFactory().openSession();
 		List<T> list = new ArrayList();
 		try {
 			session.beginTransaction();
@@ -50,5 +49,9 @@ public class GenericDAOImpl<T, ID> implements GenericDAO<T, ID> {
 		} 
 		
 		return list;
+	}
+	
+	public Session getSession() {
+		return session;
 	}
 }
