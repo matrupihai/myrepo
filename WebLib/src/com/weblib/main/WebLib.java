@@ -37,7 +37,6 @@ public class WebLib {
 		b.setTitle("The Stranger");
 		b.setYearPublished(1980);
 		
-		
 		Publisher p = new Publisher();
 		p.setPublisherName("Humanitas");
 		p.getBooks().add(b);

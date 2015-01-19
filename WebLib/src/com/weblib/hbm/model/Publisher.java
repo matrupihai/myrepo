@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -25,7 +26,7 @@ public class Publisher implements Serializable {
 	@Column (name="publisher_name")
 	private String publisherName;
 	
-	@OneToMany (fetch = FetchType.LAZY, mappedBy = "publisher")
+	@OneToMany (fetch = FetchType.LAZY, mappedBy = "publisher", cascade = CascadeType.ALL)
 	private Set<Book> books = new HashSet<Book>();
 	
 	public Publisher() {

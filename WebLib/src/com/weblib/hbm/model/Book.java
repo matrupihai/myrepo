@@ -1,5 +1,6 @@
 package com.weblib.hbm.model;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -28,6 +29,8 @@ public class Book {
 	@Column (name = "year_published")
 	private int yearPublished;
 	
+	@ManyToOne (fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@JoinColumn (name = "publisher_id")
 	private Publisher publisher;
 	
 	public int getIsbn() {
@@ -62,8 +65,6 @@ public class Book {
 		this.yearPublished = yearPublished;
 	}
 	
-	@ManyToOne (fetch = FetchType.LAZY)
-	@JoinColumn (name = "publisher_id", nullable = true)
 	public Publisher getPublisher() {
 		return publisher;
 	}
