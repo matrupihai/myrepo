@@ -57,4 +57,9 @@ public class Publisher implements Serializable {
 		this.books = books;
 	}
 	
+	@Override
+	public String toString() {
+		return this.getPublisherId() + ": " + this.getPublisherName();
+	}
+	
 }

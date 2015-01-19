@@ -1,11 +1,14 @@
 package com.weblib.main;
 
-import com.weblib.dao.PublisherDAO;
+import com.weblib.dao.PublisherDAOImpl;
+import com.weblib.hbm.model.Book;
+import com.weblib.hbm.model.Publisher;
 
 public class WebLib {
 	
 	public static void main(String[] args) {
-		System.out.println(new PublisherDAO().findAllPublishers());
+		insertOneToMany();
+		System.out.println(new PublisherDAOImpl().findAllPublishers());
 	}
 	
 //	private static void insertAuthor(String name) {
@@ -24,19 +27,19 @@ public class WebLib {
 //		new AuthorDAOImpl().insertAuthors(list);
 //	}
 	
-//	private static void insertOneToMany() {
-//		Publisher p = new Publisher();
-//		p.setPublisherName("Humanitas");
-//		
-//		Book b = new Book();
-//		b.setNoOfPages(329);
-//		b.setTitle("1984");
-//		b.setYearPublished(1949);
-//		
-//		b.setPublisher(p);
-//		p.getBooks().add(b);
-//		
-//		new PublisherDAO().insertPublisher(p);
-//	}
+	private static void insertOneToMany() {
+		Publisher p = new Publisher();
+		p.setPublisherName("Penguin");
+		
+		Book b = new Book();
+		b.setNoOfPages(354);
+		b.setTitle("The Stranger");
+		b.setYearPublished(1949);
+		
+		b.setPublisher(p);
+		p.getBooks().add(b);
+		
+		new PublisherDAOImpl().insertPublisher(p);
+	}
 	
 }
