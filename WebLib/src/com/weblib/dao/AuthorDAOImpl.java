@@ -16,7 +16,6 @@ public class AuthorDAOImpl extends GenericDAOImpl<Author, Integer> {
 //		return authors;
 //	}
 	
-	@SuppressWarnings("unchecked")
 	public List<Author> findAllAuthors() {
 		return (List<Author>) findAll();
 	}

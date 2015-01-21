@@ -1,13 +1,16 @@
 package com.weblib.main;
 
+import com.weblib.dao.AuthorDAOImpl;
+import com.weblib.dao.BookDAOImpl;
 import com.weblib.dao.PublisherDAOImpl;
+import com.weblib.hbm.model.Author;
 import com.weblib.hbm.model.Book;
 import com.weblib.hbm.model.Publisher;
 
 public class WebLib {
 	
 	public static void main(String[] args) {
-		System.out.println("ID: " + new PublisherDAOImpl().findByName("Penguin").getPublisherId());
+		insertManyToMany();
 	}
 	
 //	private static void insertAuthor(String name) {
@@ -39,6 +42,31 @@ public class WebLib {
 		p.getBooks().add(b);
 		
 		new PublisherDAOImpl().insertPublisher(p);
+	}
+	
+	private static void insertManyToMany() {
+		Publisher p = new Publisher();
+		p.setPublisherName("Humanitas");
+		
+		Author author = new Author();
+		author.setAuthorName("Ion Creanga");
+		
+		Author authorTwo = new Author();
+		authorTwo.setAuthorName("George Cosbuc");
+		
+		Book book = new Book();
+		book.setTitle("Collab G and C");
+		book.setNoOfPages(567);
+		book.setYearPublished(1978);
+		
+		book.getAuthors().add(author);
+		book.getAuthors().add(authorTwo);
+		book.setPublisher(p);
+		
+		author.getBooks().add(book);
+		authorTwo.getBooks().add(book);
+		
+		new BookDAOImpl().insert(book);
 	}
 	
 }

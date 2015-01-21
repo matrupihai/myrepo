@@ -1,5 +1,8 @@
 package com.weblib.hbm.model;
 
+import java.util.HashSet;
+import java.util.Set;
+
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -8,6 +11,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
@@ -32,6 +37,11 @@ public class Book {
 	@ManyToOne (fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	@JoinColumn (name = "publisher_id")
 	private Publisher publisher;
+	
+	@ManyToMany (fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@JoinTable (name = "DBA.\"103_BOOKS_AUTHORS\"", joinColumns = @JoinColumn(name = "isbn"), 
+				inverseJoinColumns = @JoinColumn(name = "author_id"))
+	private Set<Author> authors = new HashSet<Author>();
 	
 	public int getIsbn() {
 		return isbn;
@@ -72,6 +82,55 @@ public class Book {
 	public void setPublisher(Publisher publisher) {
 		this.publisher = publisher;
 	}
-	
+
+	public Set<Author> getAuthors() {
+		return authors;
+	}
+
+	public void setAuthors(Set<Author> authors) {
+		this.authors = authors;
+	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + isbn;
+		result = prime * result + noOfPages;
+		result = prime * result
+				+ ((publisher == null) ? 0 : publisher.hashCode());
+		result = prime * result + ((title == null) ? 0 : title.hashCode());
+		result = prime * result + yearPublished;
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Book other = (Book) obj;
+		if (isbn != other.isbn)
+			return false;
+		if (noOfPages != other.noOfPages)
+			return false;
+		if (publisher == null) {
+			if (other.publisher != null)
+				return false;
+		} else if (!publisher.equals(other.publisher))
+			return false;
+		if (title == null) {
+			if (other.title != null)
+				return false;
+		} else if (!title.equals(other.title))
+			return false;
+		if (yearPublished != other.yearPublished)
+			return false;
+		return true;
+	}
+
 	
 }
