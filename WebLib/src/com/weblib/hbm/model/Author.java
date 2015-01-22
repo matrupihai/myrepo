@@ -29,6 +29,12 @@ public class Author implements Serializable {
 	@ManyToMany (fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "authors")
 	private Set<Book> books = new HashSet<Book>();
 	
+	public Author(int authorId, String authorName, Set<Book> books) {
+		 this.authorId = authorId;
+		 this.authorName = authorName;
+		 this.books = books;
+	}
+	
 	public Author() {
 		
 	}
@@ -56,7 +62,12 @@ public class Author implements Serializable {
 	public void setBooks(Set<Book> books) {
 		this.books = books;
 	}
-
+	
+	@Override
+	public String toString() {
+		return getAuthorName() + ": " + books;
+	}
+	
 	@Override
 	public int hashCode() {
 		final int prime = 31;

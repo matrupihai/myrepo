@@ -53,6 +53,19 @@ public class GenericDAOImpl<T, ID> implements GenericDAO<T, ID> {
 		return list;
 	}
 	
+	public List<T> genericFind(String queryString) {
+		List<T> list = new ArrayList<T>();
+		try {
+			session.beginTransaction();
+			Query query = session.createQuery(queryString);
+			list.addAll(query.list()); 
+		} catch (Exception e) {
+			log.error(e);
+		} 
+		
+		return list;
+	}
+	
 	public T findByString(String varFieldName, String value) {
 		Criteria crit = getSession().createCriteria(objectType);
         crit.add(Restrictions.eq(varFieldName, value));

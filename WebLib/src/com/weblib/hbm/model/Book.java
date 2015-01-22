@@ -92,6 +92,11 @@ public class Book {
 	}
 
 	@Override
+	public String toString() {
+		return getTitle() + ", " + getYearPublished();
+	}
+	
+	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;

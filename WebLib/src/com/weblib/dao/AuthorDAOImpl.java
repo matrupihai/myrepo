@@ -20,5 +20,8 @@ public class AuthorDAOImpl extends GenericDAOImpl<Author, Integer> {
 		return (List<Author>) findAll();
 	}
 	
+	public List<Author> findBooksByAuthor(String authorName) {
+		return genericFind("from Author as a where a.authorName like '%" + authorName + "%'");
+	}
 	
 }
