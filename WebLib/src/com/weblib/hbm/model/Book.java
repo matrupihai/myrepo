@@ -16,6 +16,8 @@ import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import org.codehaus.jackson.annotate.JsonIgnore;
+
 
 @Entity
 @Table (name="DBA.\"102_BOOKS\"")
@@ -38,6 +40,7 @@ public class Book {
 	@JoinColumn (name = "publisher_id")
 	private Publisher publisher;
 	
+	@JsonIgnore
 	@ManyToMany (fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	@JoinTable (name = "DBA.\"103_BOOKS_AUTHORS\"", joinColumns = @JoinColumn(name = "isbn"), 
 				inverseJoinColumns = @JoinColumn(name = "author_id"))

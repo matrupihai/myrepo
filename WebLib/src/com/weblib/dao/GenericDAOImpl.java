@@ -68,7 +68,14 @@ public class GenericDAOImpl<T, ID> implements GenericDAO<T, ID> {
 	
 	public T findByString(String varFieldName, String value) {
 		Criteria crit = getSession().createCriteria(objectType);
-        crit.add(Restrictions.eq(varFieldName, value));
+        crit.add(Restrictions.like(varFieldName, value));
+        
+        return (T) crit.uniqueResult();
+	}
+	
+	public T findById(ID id) {
+		Criteria crit = getSession().createCriteria(objectType);
+        crit.add(Restrictions.idEq(id));
         
         return (T) crit.uniqueResult();
 	}

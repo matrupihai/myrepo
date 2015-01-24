@@ -8,7 +8,7 @@ public interface GenericDAO<T, ID> {
 //	public void insert(T... entity);
 	
 	public List<T> findAll();
-//	public T findById(ID id);
+	public T findById(ID id);
 //	public List<T> findByIds(ID... ids);
 //	
 //	public void update(T entity);

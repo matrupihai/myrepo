@@ -69,9 +69,9 @@ public class WebLib {
 		new BookDAOImpl().insert(book);
 	}
 	
-	private static void findBooksByAuthor(String authorName) {
-		Author author = new AuthorDAOImpl().findBooksByAuthor(authorName).get(0);
-		System.out.println("Author: " + author.getAuthorName());
-		System.out.println("\nBooks: " + author.getBooks());
-	}
+//	private static void findBooksByAuthor(String authorName) {
+//		Author author = new AuthorDAOImpl().findBooksByAuthor(authorName).get(0);
+//		System.out.println("Author: " + author.getAuthorName());
+//		System.out.println("\nBooks: " + author.getBooks());
+//	}
 }

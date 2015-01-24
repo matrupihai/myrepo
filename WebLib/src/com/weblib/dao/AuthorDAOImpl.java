@@ -1,8 +1,11 @@
 package com.weblib.dao;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import com.weblib.hbm.model.Author;
+import com.weblib.hbm.model.Book;
 
 public class AuthorDAOImpl extends GenericDAOImpl<Author, Integer> {
 	
@@ -17,11 +20,37 @@ public class AuthorDAOImpl extends GenericDAOImpl<Author, Integer> {
 //	}
 	
 	public List<Author> findAllAuthors() {
-		return (List<Author>) findAll();
+		return findAll();
 	}
 	
-	public List<Author> findBooksByAuthor(String authorName) {
-		return genericFind("from Author as a where a.authorName like '%" + authorName + "%'");
+	public Author findAuthorByName(String name) {
+		return findByString("authorName", name);
 	}
+	
+	public Author findAuthorById(Integer id) {
+		if (id == null || id < 0) {
+			throw new IllegalArgumentException("The id cannot be null or < 0");
+		}
+		return findById(id);
+	}
+	
+	public Set<Book> findBooksByAuthor(String authorName) {
+		 Author author = findByString("authorName", authorName);
+		 if (author != null) {
+			 return author.getBooks();
+		 } 
+		 
+		 return new HashSet<Book>();
+	}
+	
+	public Set<Book> findBooksByAuthor(Integer id) {
+		 Author author = findAuthorById(id);
+		 if (author != null) {
+			 return author.getBooks();
+		 } 
+		 
+		 return new HashSet<Book>();
+	}
+	
 	
 }
