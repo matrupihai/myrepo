@@ -14,6 +14,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import org.codehaus.jackson.annotate.JsonIgnore;
@@ -46,6 +47,10 @@ public class Book {
 	@JoinTable (name = "DBA.\"103_BOOKS_AUTHORS\"", joinColumns = @JoinColumn(name = "isbn"), 
 				inverseJoinColumns = @JoinColumn(name = "author_id"))
 	private Set<Author> authors = new HashSet<Author>();
+	
+	@JsonIgnore
+	@OneToMany (fetch = FetchType.LAZY, mappedBy = "book", cascade = CascadeType.ALL)
+	private Set<BookCopy> copies = new HashSet<BookCopy>();
 	
 	public int getIsbn() {
 		return isbn;
@@ -93,6 +98,14 @@ public class Book {
 
 	public void setAuthors(Set<Author> authors) {
 		this.authors = authors;
+	}
+	
+	public Set<BookCopy> getCopies() {
+		return copies;
+	}
+
+	public void setCopies(Set<BookCopy> copies) {
+		this.copies = copies;
 	}
 
 	@Override

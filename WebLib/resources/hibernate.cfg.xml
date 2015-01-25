@@ -18,6 +18,8 @@
 	<mapping class="com.weblib.hbm.model.Author" />
 	<mapping class="com.weblib.hbm.model.Publisher" />
 	<mapping class="com.weblib.hbm.model.Book" />
+	<mapping class="com.weblib.hbm.model.BookCopy" />
+	<mapping class="com.weblib.hbm.model.User" />
 	
   </session-factory>
 </hibernate-configuration>
