@@ -10,4 +10,5 @@ public class BookDAOImpl extends GenericDAOImpl<Book, Integer> {
 	}	
 	
 	
+	
 }
