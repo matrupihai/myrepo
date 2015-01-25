@@ -2,6 +2,7 @@ package com.weblib.services;
 
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
@@ -23,6 +24,16 @@ public class BookResource {
 		return JsonHelper.INSTANCE.objectToJson(dao.getAllBooks());
 	}
 	
+	@GET
+	@Path ("{isbn}")
+	public String getBookById(@PathParam("isbn") Integer isbn) {
+		return JsonHelper.INSTANCE.objectToJson(dao.findBookByIsbn(isbn));
+	}
 	
+	@GET
+	@Path ("{isbn}/copies")
+	public String getBookCopies(@PathParam("isbn") Integer isbn) {
+		return JsonHelper.INSTANCE.objectToJson(dao.findBookCopies(isbn));
+	}
 	
 }

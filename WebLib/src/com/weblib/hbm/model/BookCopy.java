@@ -33,6 +33,7 @@ public class BookCopy {
 	public int getCopyId() {
 		return copyId;
 	}
+	
 	public void setCopyId(int copyId) {
 		this.copyId = copyId;
 	}
