@@ -36,6 +36,7 @@ public class Book {
 	@Column (name = "year_published")
 	private int yearPublished;
 	
+	@JsonIgnore
 	@ManyToOne (fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	@JoinColumn (name = "publisher_id")
 	private Publisher publisher;

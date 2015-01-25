@@ -10,7 +10,7 @@ import com.weblib.hbm.model.Publisher;
 public class WebLib {
 	
 	public static void main(String[] args) {
-		findBooksByAuthor("osbuc");
+//		findBooksByAuthor("osbuc");
 	}
 	
 //	private static void insertAuthor(String name) {

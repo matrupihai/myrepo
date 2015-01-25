@@ -4,6 +4,7 @@ import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 
 import com.weblib.dao.AuthorDAOImpl;
@@ -12,36 +13,27 @@ import com.weblib.json.JsonHelper;
 @Path("/authors")
 @Produces (MediaType.APPLICATION_JSON)
 public class AuthorResource {
+	AuthorDAOImpl dao = new AuthorDAOImpl();
 	
 	@GET
-	public String getAuthors() {
-		return JsonHelper.INSTANCE.objectToJson(new AuthorDAOImpl().findAllAuthors());
+	public String getAuthors(@QueryParam("authorName") String authorName) {
+		if (authorName != null) {
+			return JsonHelper.INSTANCE.objectToJson(dao.findAuthorByName(authorName));
+		}
+		return JsonHelper.INSTANCE.objectToJson(dao.findAllAuthors());
 	}
-	
-	@GET
-    @Path("{name}")
-    public String getAuthorByName(@PathParam("name") String name){
-		return JsonHelper.INSTANCE.objectToJson(new AuthorDAOImpl().findAuthorByName(name));
-    }
 	
 	@GET
 	@Path("{id}")
 	public String getAuthorById(@PathParam("id") Integer id) {
-		return JsonHelper.INSTANCE.objectToJson(new AuthorDAOImpl().findAuthorById(id));
-	}
-	
-	@GET
-	@Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_JSON})
-	@Path("{name}/books")
-	public String getBooksByAuthorName(@PathParam("name") String name) {
-		return JsonHelper.INSTANCE.objectToJson(new AuthorDAOImpl().findBooksByAuthor(name));
+		return JsonHelper.INSTANCE.objectToJson(dao.findAuthorById(id));
 	}
 	
 	@GET
 	@Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_JSON})
 	@Path("{id}/books")
 	public String getBooksByAuthorId(@PathParam("id") Integer id) {
-		return JsonHelper.INSTANCE.objectToJson(new AuthorDAOImpl().findBooksByAuthor(id));
+		return JsonHelper.INSTANCE.objectToJson(dao.findBooksByAuthor(id));
 	}
 	
 }
