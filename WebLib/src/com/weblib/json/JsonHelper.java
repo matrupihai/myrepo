@@ -5,10 +5,9 @@ import java.io.IOException;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.codehaus.jackson.map.ObjectWriter;
 
-public enum JsonHelper {
-	INSTANCE;
+public class JsonHelper {
 	
-	public String objectToJson(Object... objects) {
+	public static String objectToJson(Object... objects) {
 		StringBuilder json = new StringBuilder();
 		ObjectWriter ow = new ObjectMapper().writer().withDefaultPrettyPrinter();
 		if (objects.length > 0) {

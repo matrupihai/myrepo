@@ -18,22 +18,22 @@ public class BookResource {
 	@GET
 	public String getAllBooks(@QueryParam ("title") String title) {
 		if (title != null) {
-			return JsonHelper.INSTANCE.objectToJson(dao.findBookByTitle(title));
+			return JsonHelper.objectToJson(dao.findBookByTitle(title));
 		}
 		
-		return JsonHelper.INSTANCE.objectToJson(dao.getAllBooks());
+		return JsonHelper.objectToJson(dao.getAllBooks());
 	}
 	
 	@GET
 	@Path ("{isbn}")
 	public String getBookById(@PathParam("isbn") Integer isbn) {
-		return JsonHelper.INSTANCE.objectToJson(dao.findBookByIsbn(isbn));
+		return JsonHelper.objectToJson(dao.findBookByIsbn(isbn));
 	}
 	
 	@GET
 	@Path ("{isbn}/copies")
 	public String getBookCopies(@PathParam("isbn") Integer isbn) {
-		return JsonHelper.INSTANCE.objectToJson(dao.findBookCopies(isbn));
+		return JsonHelper.objectToJson(dao.findBookCopies(isbn));
 	}
 	
 }

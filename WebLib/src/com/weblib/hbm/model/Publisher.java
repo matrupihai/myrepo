@@ -61,5 +61,42 @@ public class Publisher implements Serializable {
 	public String toString() {
 		return this.getPublisherId() + ": " + this.getPublisherName();
 	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((books == null) ? 0 : books.hashCode());
+		result = prime * result + publisherId;
+		result = prime * result
+				+ ((publisherName == null) ? 0 : publisherName.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Publisher other = (Publisher) obj;
+		if (books == null) {
+			if (other.books != null)
+				return false;
+		} else if (!books.equals(other.books))
+			return false;
+		if (publisherId != other.publisherId)
+			return false;
+		if (publisherName == null) {
+			if (other.publisherName != null)
+				return false;
+		} else if (!publisherName.equals(other.publisherName))
+			return false;
+		return true;
+	}
+	
+	
 	
 }
