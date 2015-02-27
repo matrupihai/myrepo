@@ -11,29 +11,30 @@ import com.weblib.dao.AuthorDAOImpl;
 import com.weblib.json.JsonHelper;
 
 @Path("/authors")
-@Produces (MediaType.APPLICATION_JSON)
 public class AuthorResource {
 	AuthorDAOImpl dao = new AuthorDAOImpl();
 	
 	@GET
+	@Produces (MediaType.APPLICATION_JSON)
 	public String getAuthors(@QueryParam("authorName") String authorName) {
 		if (authorName != null) {
-			return JsonHelper.INSTANCE.objectToJson(dao.findAuthorByName(authorName));
+			return JsonHelper.objectToJson(dao.findAuthorByName(authorName));
 		}
-		return JsonHelper.INSTANCE.objectToJson(dao.findAllAuthors());
+		return JsonHelper.objectToJson(dao.findAllAuthors());
 	}
 	
 	@GET
+	@Produces (MediaType.APPLICATION_JSON)
 	@Path("{id}")
 	public String getAuthorById(@PathParam("id") Integer id) {
-		return JsonHelper.INSTANCE.objectToJson(dao.findAuthorById(id));
+		return JsonHelper.objectToJson(dao.findAuthorById(id));
 	}
 	
 	@GET
-	@Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_JSON})
+	@Produces (MediaType.APPLICATION_JSON)
 	@Path("{id}/books")
 	public String getBooksByAuthorId(@PathParam("id") Integer id) {
-		return JsonHelper.INSTANCE.objectToJson(dao.findBooksByAuthor(id));
+		return JsonHelper.objectToJson(dao.findBooksByAuthor(id));
 	}
 	
 }

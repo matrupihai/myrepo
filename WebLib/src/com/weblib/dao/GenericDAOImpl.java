@@ -74,10 +74,17 @@ public class GenericDAOImpl<T, ID> implements GenericDAO<T, ID> {
 	}
 	
 	public T findById(ID id) {
+		checkId(id);
 		Criteria crit = getSession().createCriteria(objectType);
         crit.add(Restrictions.idEq(id));
         
         return (T) crit.uniqueResult();
+	}
+	
+	public void checkId(ID id) {
+		if (id == null) {
+			throw new IllegalArgumentException("The id cannot be null)");
+		}
 	}
 	
 	public Session getSession() {
