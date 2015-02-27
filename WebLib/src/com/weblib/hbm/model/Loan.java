@@ -2,14 +2,21 @@ package com.weblib.hbm.model;
 
 import java.sql.Date;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+
+import org.codehaus.jackson.annotate.JsonIgnore;
 
 @Entity
 @Table (name = "DBA.\"106_LOANS\"")
@@ -21,6 +28,16 @@ public class Loan {
 	
 	@Temporal (TemporalType.TIMESTAMP)
 	private Date dueDate;
+	
+	@JsonIgnore
+	@ManyToOne (fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@JoinColumn (name = "user_id")
+	private User user;
+	
+	@JsonIgnore
+	@OneToOne (fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@JoinColumn (name = "copy_id")
+	private BookCopy bookCopy;
 	
 	public Loan() {
 		
@@ -40,6 +57,22 @@ public class Loan {
 
 	public void setDueDate(Date dueDate) {
 		this.dueDate = dueDate;
+	}
+	
+	public User getUser() {
+		return user;
+	}
+
+	public void setUser(User user) {
+		this.user = user;
+	}
+	
+	public BookCopy getBookCopy() {
+		return bookCopy;
+	}
+
+	public void setBookCopy(BookCopy bookCopy) {
+		this.bookCopy = bookCopy;
 	}
 
 	@Override

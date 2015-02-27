@@ -21,7 +21,7 @@ public class JsonHelper {
 				}
 			}
 		} else {
-			return "No result";
+			return "No results";
 		}
 		
 		return json.toString();

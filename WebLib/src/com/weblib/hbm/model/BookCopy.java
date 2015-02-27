@@ -9,6 +9,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 import org.codehaus.jackson.annotate.JsonIgnore;
@@ -25,6 +26,9 @@ public class BookCopy {
 	@ManyToOne (fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	@JoinColumn (name = "isbn")
 	private Book book;
+	
+	@OneToOne (fetch = FetchType.LAZY, mappedBy = "bookCopy", cascade = CascadeType.ALL)
+	private Loan loan;
 	
 	public BookCopy() {
 		

@@ -5,18 +5,18 @@ import java.util.List;
 import com.weblib.hbm.model.Publisher;
 
 public class PublisherDAOImpl extends GenericDAOImpl<Publisher, Integer> {
-	
+
 	public Publisher insertPublisher(Publisher publisher) {
 		insert(publisher);
 		return publisher;
 	}
-	
+
 	public List<Publisher> findAllPublishers() {
 		return findAll();
 	}
-	
-    public Publisher findByName(String name) {
-    	return findByString("publisherName", name);
-    }
-    
+
+	public Publisher findByName(String name) {
+		return findByString("publisherName", name);
+	}
+
 }

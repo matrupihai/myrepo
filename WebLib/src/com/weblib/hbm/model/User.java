@@ -1,10 +1,16 @@
 package com.weblib.hbm.model;
 
+import java.util.HashSet;
+import java.util.Set;
+
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 @Entity
@@ -23,7 +29,14 @@ public class User {
 	
 	@Column (name = "user_phone")
 	private String userPhone;
-
+	
+	@OneToMany (fetch = FetchType.LAZY, mappedBy = "user", cascade = CascadeType.ALL)
+	private Set<Loan> loans = new HashSet<Loan>(); 
+	
+	public User() {
+		
+	}
+	
 	public int getUserId() {
 		return userId;
 	}
@@ -54,6 +67,14 @@ public class User {
 
 	public void setUserPhone(String userPhone) {
 		this.userPhone = userPhone;
+	}
+	
+	public Set<Loan> getLoans() {
+		return loans;
+	}
+
+	public void setLoans(Set<Loan> loans) {
+		this.loans = loans;
 	}
 
 	@Override
