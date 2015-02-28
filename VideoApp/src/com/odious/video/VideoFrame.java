@@ -11,6 +11,8 @@ public class VideoFrame extends CanvasFrame implements VideoActions {
 		RECORDING
 	}
 	
+	private Status status = Status.STOPPED;
+	
 	public static VideoFrame newInstance() {
 		return new VideoFrame("");
 	}
@@ -38,6 +40,14 @@ public class VideoFrame extends CanvasFrame implements VideoActions {
 	@Override
 	public void record() {
 		
+	}
+
+	public Status getStatus() {
+		return status;
+	}
+
+	public void setStatus(Status status) {
+		this.status = status;
 	}
 	
 }

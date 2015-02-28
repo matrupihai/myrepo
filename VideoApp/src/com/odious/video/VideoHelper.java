@@ -15,7 +15,8 @@ public class VideoHelper {
 		int count = videoInput.listDevices();
 		if (count > 0) {
 			for (int i = 0; i < count; i++) {
-				StringBuilder deviceName = new StringBuilder(i).append(" ").append(videoInput.getDeviceName(i));
+				StringBuilder deviceName = new StringBuilder(i).append(" ")
+										.append(videoInput.getDeviceName(i));
 				devices.add(deviceName.toString());
 			}
 		} else {
@@ -23,6 +24,10 @@ public class VideoHelper {
 		}
 
 		System.out.println("Video devices #: " + count);
+	}
+	
+	public static List<String> getDevices() {
+		return devices;
 	}
 	
 }

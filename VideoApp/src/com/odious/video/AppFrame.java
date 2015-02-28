@@ -1,16 +1,14 @@
 package com.odious.video;
 
 import java.awt.BorderLayout;
-import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Toolkit;
 
 import javax.swing.JFrame;
-import javax.swing.JPanel;
 
-import com.odious.gui.CustomButton;
 import com.odious.gui.CustomUI;
 import com.odious.panel.AppMenuBar;
+import com.odious.panel.MainPanel;
 
 public class AppFrame {
 	
@@ -19,6 +17,7 @@ public class AppFrame {
 	public int height = screenSize.height;
 	
 	private VideoFrame video = VideoFrame.newInstance();
+	private MainPanel panel;
 	
 	public AppFrame() {
 		initGui();
@@ -26,20 +25,27 @@ public class AppFrame {
 	
 	private void initGui() {
 		CustomUI.setCustomUI();
-		video.setExtendedState(JFrame.MAXIMIZED_BOTH);
-		video.setLayout(new BorderLayout());
+		initVideo();
 		initMenuBar();
+		initMainPanel();
 		
-		JPanel panel = new JPanel();
-		panel.setBackground(Color.BLUE);
-		panel.setPreferredSize(new Dimension(width/5, height));
 		
-		CustomButton playButton = new CustomButton("play.png", "hoverPlay.png", "pressedPlay.png");
+//		CustomButton playButton = new CustomButton("play.png", "hoverPlay.png", "pressedPlay.png");
 		
-		video.add(panel, BorderLayout.EAST);
-		video.add(playButton, BorderLayout.NORTH);
 		
 		video.setVisible(true);
+	}
+	
+	private void initVideo() {
+		video.setExtendedState(JFrame.MAXIMIZED_BOTH);
+		video.setLayout(new BorderLayout());
+	}
+	
+	private void initMainPanel() {
+		panel = new MainPanel();
+		panel.setPreferredSize(new Dimension(width/5, height));
+		panel.setVideoFrame(video);
+		video.add(panel, BorderLayout.EAST);
 	}
 	
 	private void initMenuBar() {
