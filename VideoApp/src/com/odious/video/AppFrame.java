@@ -12,19 +12,17 @@ import com.odious.panel.MainPanel;
 import com.odious.panel.SettingsDialog;
 import com.odious.util.VideoSettings;
 
-public enum AppFrame {
-	INSTANCE(VideoFrame.newInstance());
+public class AppFrame {
 	
 	public Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
 	public int width = screenSize.width;
 	public int height = screenSize.height;
 	
-	private VideoFrame video;
+	private VideoFrame video = VideoFrame.newInstance();;
 	private MainPanel panel;
 	private SettingsDialog settingsDialog;
 	
-	private AppFrame(VideoFrame video) {
-		this.video = video;
+	public AppFrame() {
 		initGui();
 	}
 	
@@ -46,14 +44,13 @@ public enum AppFrame {
 	
 	private void initVideo() {
 		video.setExtendedState(JFrame.MAXIMIZED_BOTH);
-		video.setLayout(new BorderLayout());
 	}
 	
 	private void initMainPanel() {
 		panel = new MainPanel();
 		panel.setPreferredSize(new Dimension(width/5, height));
 		panel.setVideoFrame(video);
-		video.add(panel, BorderLayout.EAST);
+		video.getContentPane().add(panel, BorderLayout.EAST);
 	}
 	
 	private void initMenuBar() {

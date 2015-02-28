@@ -109,6 +109,8 @@ public class VideoFrame extends CanvasFrame implements VideoActions {
 		recorder.setFrameRate(settings.getFramerate());
 		recorder.start();
 		
+		getCanvas().setSize(RESOLUTION_WIDTH, RESOLUTION_HEIGHT);
+		
 		CvFont font;
 		
 		while (status.equals(Status.STARTED) && (grabbedImage = grabber.grab()) != null) {
