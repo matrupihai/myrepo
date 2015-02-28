@@ -37,7 +37,9 @@ public class AppMenuBar {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				System.out.println(appFrame.width);
+				SettingsDialog dialog = appFrame.getSettingsDialog();
+				dialog.setLocationRelativeTo(null);
+				dialog.setVisible(true);
 			}
 		});
 

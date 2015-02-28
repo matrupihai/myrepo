@@ -6,33 +6,52 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class VideoFileManager {
+	private File mainDir, screenshotDir, videoFile;
+	private String filePath;
 	
-	public static String setVideoFilePath() {
-		File mainDir;
+	public VideoFileManager(String settingsFilePath, String geoLocation) {
 		DateFormat date = new SimpleDateFormat("yyyy-MM-dd");
 		DateFormat time = new SimpleDateFormat("hh_mm_ss");
-		String settingsFilePath = settingsDialog.getFilePath();
-		if(settingsFilePath.isEmpty()){
-			mainDir = new File(System.getProperty("user.dir"), fileLocation + " " + date.format(new Date()));
+		if (settingsFilePath.isEmpty()) {
+			mainDir = new File(System.getProperty("user.dir"), geoLocation + " " + date.format(new Date()));
 		} else {
-			mainDir = new File(settingsFilePath, fileLocation + " " + date.format(new Date()));
+			mainDir = new File(settingsFilePath, geoLocation + " " + date.format(new Date()));
 		}
-		String filePath = null;
 		String timestamp = time.format(new Date());
-		if(!mainDir.exists()){
-			if(mainDir.mkdir()){
-				filePath = mainDir.getAbsolutePath() + "\\" + fileLocation +  " " + 
-							timestamp + ".wmv";
-				screenshotDir = new File(mainDir.getAbsolutePath(), "foto " + fileLocation + " " + timestamp);
+		if (!mainDir.exists()) {
+			if (mainDir.mkdir()) {
+				filePath = mainDir.getAbsolutePath() + "\\" + geoLocation +  " " + 
+						timestamp + ".wmv";
+				screenshotDir = new File(mainDir.getAbsolutePath(), "foto " + geoLocation + " " + timestamp);
 				screenshotDir.mkdir();
-				}
+			}
 		} else {
-				filePath = mainDir.getAbsolutePath() + "\\" + fileLocation +  " " + 
-							timestamp + ".wmv";
-				screenshotDir = new File(mainDir.getAbsolutePath(), "foto " + fileLocation + " " + timestamp);
-				screenshotDir.mkdir();
+			filePath = mainDir.getAbsolutePath() + "\\" + geoLocation +  " " + 
+					timestamp + ".wmv";
+			screenshotDir = new File(mainDir.getAbsolutePath(), "foto " + geoLocation + " " + timestamp);
+			screenshotDir.mkdir();
 		}	
-		return filePath;
+	}
+	
+	public void deleteScreenshotDir() {
+		if (screenshotDir.exists() && screenshotDir.list().length == 0) {
+			screenshotDir.delete();
+		}
+	}
+	
+	public void deleteTempVideo() {
+		if (videoFile != null && videoFile.length() < 1024) {
+			System.out.println("Temp file deleted: " + videoFile.delete());
+		}
+	}
+	
+	public File getVideoFile() {
+		videoFile = new File(filePath);
+		return videoFile;
+	}
+	
+	public File getScrenshotDir() {
+		return screenshotDir;
 	}
 	
 }

@@ -11,6 +11,8 @@ import net.miginfocom.swing.MigLayout;
 
 public class LocationPanel extends JPanel {
 	
+	private JTextField fieldTown;
+
 	public LocationPanel() {
 		setBorder(BorderFactory.createLineBorder(MainPanel.BASE_COLOR, 1));
 		setLayout(new MigLayout());
@@ -32,7 +34,7 @@ public class LocationPanel extends JPanel {
 
 		JTextField fieldLatitude = new JTextField(10);
 		JTextField fieldLongitude = new JTextField(10);
-		JTextField fieldTown = new JTextField(14);
+		fieldTown = new JTextField(14);
 		JTextField fieldCounty = new JTextField(14);
 		JTextField fieldBeneficiary = new JTextField(14);
 
@@ -50,7 +52,10 @@ public class LocationPanel extends JPanel {
 		add(labelDate, "wrap");
 		add(radioManual, "wrap");
 		add(radioAuto);
-
+	}
+	
+	public String getGeoLocation() {
+		return fieldTown.getText();
 	}
 	
 }

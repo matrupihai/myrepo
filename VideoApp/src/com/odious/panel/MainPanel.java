@@ -1,5 +1,6 @@
 package com.odious.panel;
 
+import java.awt.BorderLayout;
 import java.awt.Color;
 
 import javax.swing.JPanel;
@@ -7,9 +8,11 @@ import javax.swing.JScrollPane;
 
 import net.miginfocom.swing.MigLayout;
 
+import com.odious.util.VideoVisitable;
+import com.odious.util.VideoVisitor;
 import com.odious.video.VideoFrame;
 
-public class MainPanel extends JPanel {
+public class MainPanel extends JPanel implements VideoVisitable {
 	public static final Color BASE_COLOR = new Color(140, 140, 140);
 	
 	private VideoFrame video;
@@ -17,24 +20,27 @@ public class MainPanel extends JPanel {
 	private DataPanel dataPanel;
 	private VideoControlPanel videoPanel;
 	
-	private JScrollPane scrollPaneLeft = new JScrollPane();
-	private JScrollPane scrollPaneRight = new JScrollPane();
 	JPanel leftPanel = new JPanel(new MigLayout());
 	JPanel rightPanel = new JPanel(new MigLayout());
 	
 	public MainPanel() {
 		setBackground(Color.WHITE);
-		setLayout(new MigLayout("flowy"));
+		setLayout(new BorderLayout());
 		
+		initVideoPanel();
 		initLocationPanel();
 		initDataPanel();
-		initVideoPanel();
 		
-		scrollPaneLeft.add(leftPanel);
-		scrollPaneRight.add(rightPanel);
+		JScrollPane scrollPaneLeft = new JScrollPane(leftPanel);
+		JScrollPane scrollPaneRight = new JScrollPane(rightPanel);
 		
-		add(scrollPaneLeft, "wrap");
-		add(scrollPaneRight, "top, wrap");
+		add(scrollPaneLeft, BorderLayout.CENTER);
+		add(scrollPaneRight, BorderLayout.EAST);
+	}
+	
+	@Override
+	public void accept(VideoVisitor visitor) {
+		visitor.visit(this);
 	}
 	
 	private void initLocationPanel() {
@@ -49,11 +55,16 @@ public class MainPanel extends JPanel {
 	
 	private void initVideoPanel() {
 		videoPanel = new VideoControlPanel();
-		videoPanel.setVideoFrame(video);
 		leftPanel.add(videoPanel, "top, left, wrap");
+	}
+	
+	public String getGeoLocation() {
+		return locationPanel.getGeoLocation();
 	}
 	
 	public void setVideoFrame(VideoFrame video) {
 		this.video = video;
+		videoPanel.setVideoFrame(video);
 	}
+
 }

@@ -24,8 +24,8 @@ public class CustomButton extends JButton {
 	}
 	
 	private ImageIcon loadImageIcon(String fileName) throws IOException {
-		BufferedImage image = ImageIO.read(getClass().getClassLoader()
-							.getResourceAsStream(fileName));
+		BufferedImage image = ImageIO.read(this.getClass().getClassLoader()
+							.getResourceAsStream("com/odious/images/" + fileName));
 
 		return new ImageIcon(image);
 	}
