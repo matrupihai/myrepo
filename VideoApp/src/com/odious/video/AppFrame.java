@@ -14,9 +14,11 @@ import com.odious.util.VideoSettings;
 
 public class AppFrame extends JFrame {
 	
-	public Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-	public int width = screenSize.width;
-	public int height = screenSize.height;
+	public static Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+	public static int width = screenSize.width;
+	public static int height = screenSize.height;
+	
+	private static Dimension videoDimension = new Dimension(2*(width/3), height);
 	
 	private VideoPanel video = VideoPanel.newInstance();
 	private MainPanel panel;
@@ -40,7 +42,7 @@ public class AppFrame extends JFrame {
 	}
 	
 	private void initVideo() {
-		video.setPreferredSize(new Dimension(2*(width/3), height));
+		video.setPreferredSize(videoDimension);
 		add(video, BorderLayout.CENTER);
 	}
 	
@@ -58,10 +60,12 @@ public class AppFrame extends JFrame {
 	}
 	
 	private void initSettings() {
-		VideoSettings settings = new VideoSettings();
-		settings.visit(panel);
-		settings.visit(settingsDialog);
+		VideoSettings settings = new VideoSettings(settingsDialog);
 		video.setSettings(settings);
+	}
+	
+	public static Dimension getVideoDimension() {
+		return videoDimension;
 	}
 	
 	public SettingsDialog getSettingsDialog() {

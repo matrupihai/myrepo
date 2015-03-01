@@ -4,30 +4,33 @@ import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
 import java.awt.event.KeyEvent;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JDialog;
 import javax.swing.JFileChooser;
-import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.WindowConstants;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 
 import net.miginfocom.swing.MigLayout;
 
 import com.odious.user.UserSettings;
 import com.odious.util.LoadAndSave;
-import com.odious.util.VideoVisitable;
-import com.odious.util.VideoVisitor;
 
-public class SettingsDialog extends JDialog implements VideoVisitable {
-//	private static final long serialVersionUID = 7526472295622776147L;
-	
+public class SettingsDialog extends JDialog {
 	private static SettingsDialog INSTANCE = new SettingsDialog();
 	
 	public static final String SETTINGS_FILENAME = "settings.egb";
@@ -38,14 +41,23 @@ public class SettingsDialog extends JDialog implements VideoVisitable {
 	public static final String DOWN_CENTER = "jos-centru";
 	public static final String DOWN_RIGHT = "jos-dreapta";
 
+	private String[] colors = new String[] { "verde", "alb", "rosu", "magenta" };
+	private Integer[] framerates = new Integer[] { 25, 20, 30 };
+	private Double[] sizes = new Double[] { 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9,
+			1.0, 1.1, 1.2, 1.3, 1.4, 1.5, 1.6, 1.7, 1.8, 1.9, 2.0, 2.1,
+			2.2, 2.3, 2.4, 2.5, 2.6, 2.7, 2.8 };
+	private String[] positions = new String[] { UP_LEFT, UP_CENTER, UP_RIGHT,
+			DOWN_LEFT, DOWN_CENTER, DOWN_RIGHT };
+	
 	private JButton okButton, cancelButton, browseButton;
 	private JTextField filePathField;
 	private JComboBox<String> colorCombo, positionCombo;
 	private JComboBox<Integer> framerateCombo, baudCombo;
 	private JComboBox<Double> sizeCombo;
 	private String filePath = null;
-
+	
 	private UserSettings userSettings;
+	private List<PropertyChangeListener> listeners = new ArrayList<PropertyChangeListener>();
 	
 	public static SettingsDialog getInstance() {
 		return INSTANCE;
@@ -74,21 +86,43 @@ public class SettingsDialog extends JDialog implements VideoVisitable {
 		setSize(430, 355);
 		setLocationRelativeTo(null);
 	}
+
+	public void addChangeListener(PropertyChangeListener newListener) {
+		listeners.add(newListener);
+	}
 	
-	@Override
-	public void accept(VideoVisitor visitor) {
-		visitor.visit(this);
+	private void notifyListeners(Object object, String property, Object oldValue, Object newValue) {
+		for (PropertyChangeListener name : listeners) {
+			name.propertyChange(new PropertyChangeEvent(this, property, oldValue, newValue));
+		}
 	}
 	
 	private JPanel loadVideoSettingsPanel() {
 		JPanel panelSettings = new JPanel(new MigLayout());
-		panelSettings.setBorder(BorderFactory.createTitledBorder("Video"));
+		panelSettings.setBorder(BorderFactory.createLineBorder(MainPanel.BASE_COLOR, 1));
 		JLabel destinationLabel = new JLabel("Destinatie");
 		JLabel fontLabel = new JLabel("Font");
 		JLabel framerateLabel = new JLabel("Framerate");
 		filePathField = new JTextField(25);
 		filePathField.setEditable(false);
-
+		filePathField.getDocument().addDocumentListener(new DocumentListener() {
+			
+			@Override
+			public void removeUpdate(DocumentEvent e) {
+				notifyListeners(this, "FILEPATH", null, filePathField.getText());
+			}
+			
+			@Override
+			public void insertUpdate(DocumentEvent e) {
+				notifyListeners(this, "FILEPATH", null, filePathField.getText());
+			}
+			
+			@Override
+			public void changedUpdate(DocumentEvent e) {
+				notifyListeners(this, "FILEPATH", null, filePathField.getText());
+			}
+		});
+		
 		browseButton = new JButton("...");
 		browseButton.addActionListener(new ActionListener() {
 
@@ -98,25 +132,45 @@ public class SettingsDialog extends JDialog implements VideoVisitable {
 			}
 		});
 
-		String[] colors = new String[] { "verde", "alb", "rosu", "magenta" };
 		colorCombo = new JComboBox<String>(colors);
 		colorCombo.setSelectedItem("verde");
 		colorCombo.setEditable(false);
+		colorCombo.addItemListener(new ItemListener() {
+			
+			@Override
+			public void itemStateChanged(ItemEvent e) {
+				notifyListeners(this, "FONTCOLOR", null, (String) e.getItem());
+			}
+		});
 
-		Integer[] framerate = new Integer[] { 25, 20, 30 };
-		framerateCombo = new JComboBox<Integer>(framerate);
+		framerateCombo = new JComboBox<Integer>(framerates);
+		framerateCombo.addItemListener(new ItemListener() {
+			
+			@Override
+			public void itemStateChanged(ItemEvent e) {
+				notifyListeners(this, "FRAMERATE", null, (Integer) e.getItem());
+			}
+		});
+		
+		sizeCombo = new JComboBox<Double>(sizes);
+		sizeCombo.addItemListener(new ItemListener() {
+			
+			@Override
+			public void itemStateChanged(ItemEvent e) {
+				notifyListeners(this, "FONTSIZE", null, (Double) e.getItem());
+			}
+		});
 
-		Double[] size = new Double[] { 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9,
-				1.0, 1.1, 1.2, 1.3, 1.4, 1.5, 1.6, 1.7, 1.8, 1.9, 2.0, 2.1,
-				2.2, 2.3, 2.4, 2.5, 2.6, 2.7, 2.8 };
-		sizeCombo = new JComboBox<Double>(size);
 
-		String[] position = new String[] { UP_LEFT, UP_CENTER, UP_RIGHT,
-				DOWN_LEFT, DOWN_CENTER, DOWN_RIGHT };
-
-		positionCombo = new JComboBox<String>(position);
+		positionCombo = new JComboBox<String>(positions);
+		positionCombo.addItemListener(new ItemListener() {
+			@Override
+			public void itemStateChanged(ItemEvent e) {
+				notifyListeners(this, "FONTPOSITION", null, (String) e.getItem());
+			}
+		});
 		positionCombo.setSelectedIndex(0);
-
+		
 		JPanel comboContainer = new JPanel(new MigLayout());
 
 		comboContainer.add(framerateLabel, "west, gapright 12");
@@ -188,7 +242,7 @@ public class SettingsDialog extends JDialog implements VideoVisitable {
 
 	private JPanel loadSerialPanel() {
 		JPanel serialPanel = new JPanel(new MigLayout());
-		serialPanel.setBorder(BorderFactory.createTitledBorder("Serial"));
+		serialPanel.setBorder(BorderFactory.createLineBorder(MainPanel.BASE_COLOR, 1));
 		JLabel baudLabel = new JLabel("Baudrate");
 		Integer[] baudValues = new Integer[] { 9600, 4800 };
 		baudCombo = new JComboBox<Integer>(baudValues);

@@ -8,11 +8,9 @@ import javax.swing.JScrollPane;
 
 import net.miginfocom.swing.MigLayout;
 
-import com.odious.util.VideoVisitable;
-import com.odious.util.VideoVisitor;
 import com.odious.video.VideoPanel;
 
-public class MainPanel extends JPanel implements VideoVisitable {
+public class MainPanel extends JPanel {
 	public static final Color BASE_COLOR = new Color(140, 140, 140);
 	
 	private VideoPanel video;
@@ -36,11 +34,6 @@ public class MainPanel extends JPanel implements VideoVisitable {
 		
 		add(scrollPaneLeft, BorderLayout.CENTER);
 		add(scrollPaneRight, BorderLayout.EAST);
-	}
-	
-	@Override
-	public void accept(VideoVisitor visitor) {
-		visitor.visit(this);
 	}
 	
 	private void initLocationPanel() {

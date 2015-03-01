@@ -6,6 +6,8 @@ import static com.googlecode.javacv.cpp.opencv_core.cvPoint;
 import static com.googlecode.javacv.cpp.opencv_core.cvPutText;
 
 import java.awt.BorderLayout;
+import java.awt.Dimension;
+import java.awt.image.BufferedImage;
 import java.io.File;
 
 import javax.swing.ImageIcon;
@@ -111,16 +113,16 @@ public class VideoPanel extends JPanel implements VideoActions {
 		
 		videoFileManager = new VideoFileManager(settings.getSettingsFilePath(), settings.getGeoLocation());
 		videoFile = videoFileManager.getVideoFile();
-//		recorder = new OpenCVFrameRecorder(videoFile, RESOLUTION_WIDTH, RESOLUTION_HEIGHT);
 		recorder = FrameRecorder.createDefault(videoFile, DISPLAY_WIDTH, DISPLAY_HEIGHT);
 		recorder.setVideoCodec(opencv_highgui.CV_FOURCC('M','P','4','2'));
 		recorder.setFrameRate(settings.getFramerate());
 		recorder.start();
 		
+		Dimension videoDimension = AppFrame.getVideoDimension();
+		
 		CvFont font = new CvFont(CV_FONT_HERSHEY_TRIPLEX, settings.getFontSize(), 1);
 		while (status.equals(Status.STARTED) && (grabbedImage = grabber.grab()) != null) {
 			cvClearMemStorage(storage);
-			settings.visit(SettingsDialog.getInstance());
 			
 //			displayedNumber = ModbusReader.getValue();
 			displayedNumber = 255;
@@ -142,8 +144,9 @@ public class VideoPanel extends JPanel implements VideoActions {
 //				cvNot(grabbedImage, grabbedImage);
 //			}
 			
-			
-			image.setIcon(new ImageIcon(grabbedImage.getBufferedImage()));
+			BufferedImage bufImage = grabbedImage.getBufferedImage();
+			bufImage = VideoHelper.resize(bufImage, videoDimension.width, videoDimension.height);
+			image.setIcon(new ImageIcon(bufImage));
 			image.repaint();
 			if (Status.RECORDING.equals(status)) {
 				recorder.record(grabbedImage);
@@ -160,7 +163,7 @@ public class VideoPanel extends JPanel implements VideoActions {
 		
 	}
 	
-	public void clearVideoResources(){
+	public void clearVideoResources() {
 		if (recorder != null && grabber != null) {
 				try {
 					recorder.stop();
