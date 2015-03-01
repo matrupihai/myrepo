@@ -5,12 +5,15 @@ import static com.googlecode.javacv.cpp.opencv_core.cvClearMemStorage;
 import static com.googlecode.javacv.cpp.opencv_core.cvPoint;
 import static com.googlecode.javacv.cpp.opencv_core.cvPutText;
 
+import java.awt.BorderLayout;
 import java.io.File;
 
+import javax.swing.ImageIcon;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
 import javax.swing.SwingWorker;
 
 import com.googlecode.javacpp.Loader;
-import com.googlecode.javacv.CanvasFrame;
 import com.googlecode.javacv.FrameGrabber;
 import com.googlecode.javacv.FrameRecorder;
 import com.googlecode.javacv.cpp.opencv_core.CvFont;
@@ -23,11 +26,11 @@ import com.odious.panel.SettingsDialog;
 import com.odious.util.VideoFileManager;
 import com.odious.util.VideoSettings;
 
-public class VideoFrame extends CanvasFrame implements VideoActions {
+public class VideoPanel extends JPanel implements VideoActions {
 	
-	public static final int RESOLUTION_WIDTH = 640;
-	public static final int RESOLUTION_HEIGHT = 480;
-
+	public static final int DISPLAY_WIDTH = 1280;
+	public static final int DISPLAY_HEIGHT = 720;
+	
 	private FrameGrabber grabber;
 	private FrameRecorder recorder;
 	private IplImage grabbedImage;
@@ -44,19 +47,21 @@ public class VideoFrame extends CanvasFrame implements VideoActions {
 	
 	private Status status = Status.STOPPED;
 	private File videoFile;
+	private JLabel image;
 	private VideoFileManager videoFileManager;
 	private CvScalar color;
 	private int displayedNumber;
 	private int xPoint;
 	private int yPoint;
 	
-	public static VideoFrame newInstance() {
-		return new VideoFrame("VideoApp");
+	public static VideoPanel newInstance() {
+		return new VideoPanel();
 	}
 	
-	private VideoFrame(String title) {
-		super(title);
-		setVisible(true);
+	private VideoPanel() {
+		setLayout(new BorderLayout());
+		image = new JLabel();
+		add(image, BorderLayout.CENTER);
 	}
 
 	public void setSettings(VideoSettings settings) {
@@ -93,6 +98,8 @@ public class VideoFrame extends CanvasFrame implements VideoActions {
 		Loader.load(opencv_objdetect.class);
 		try {
 			grabber = FrameGrabber.createDefault(deviceId);
+			grabber.setImageWidth(DISPLAY_WIDTH);
+			grabber.setImageHeight(DISPLAY_HEIGHT);
 			grabber.start();
 		} catch (FrameGrabber.Exception e) {
 			e.printStackTrace();
@@ -104,15 +111,12 @@ public class VideoFrame extends CanvasFrame implements VideoActions {
 		videoFileManager = new VideoFileManager(settings.getSettingsFilePath(), settings.getGeoLocation());
 		videoFile = videoFileManager.getVideoFile();
 //		recorder = new OpenCVFrameRecorder(videoFile, RESOLUTION_WIDTH, RESOLUTION_HEIGHT);
-		recorder = FrameRecorder.createDefault(videoFile, RESOLUTION_WIDTH, RESOLUTION_HEIGHT);
+		recorder = FrameRecorder.createDefault(videoFile, DISPLAY_WIDTH, DISPLAY_HEIGHT);
 		recorder.setVideoCodec(opencv_highgui.CV_FOURCC('M','P','4','2'));
 		recorder.setFrameRate(settings.getFramerate());
 		recorder.start();
 		
-		getCanvas().setSize(RESOLUTION_WIDTH, RESOLUTION_HEIGHT);
-		
-		CvFont font;
-		
+		CvFont font = new CvFont(CV_FONT_HERSHEY_TRIPLEX, settings.getFontSize(), 1);
 		while (status.equals(Status.STARTED) && (grabbedImage = grabber.grab()) != null) {
 			cvClearMemStorage(storage);
 //			displayedNumber = ModbusReader.getValue();
@@ -121,7 +125,7 @@ public class VideoFrame extends CanvasFrame implements VideoActions {
 			setTextPosition();
 			
 			//text
-			font = new CvFont(CV_FONT_HERSHEY_TRIPLEX, settings.getFontSize(), 1);
+			font.vscale((float) settings.getFontSize());
 			cvPutText(grabbedImage, "" + displayedNumber + "m", cvPoint(xPoint, yPoint), font, color);
 			
 //			//contrast - 
@@ -135,7 +139,8 @@ public class VideoFrame extends CanvasFrame implements VideoActions {
 //				cvNot(grabbedImage, grabbedImage);
 //			}
 			
-			showImage(grabbedImage);
+			image.setIcon(new ImageIcon(grabbedImage.getBufferedImage()));
+			image.repaint();
 			if (Status.RECORDING.equals(status)) {
 				recorder.record(grabbedImage);
 			}
@@ -152,11 +157,11 @@ public class VideoFrame extends CanvasFrame implements VideoActions {
 	}
 	
 	public void clearVideoResources(){
-		status = Status.STOPPED;
 		if (recorder != null && grabber != null) {
 				try {
 					recorder.stop();
 					grabber.stop();
+					status = Status.STOPPED;
 				} catch (com.googlecode.javacv.FrameRecorder.Exception
 						| com.googlecode.javacv.FrameGrabber.Exception e) {
 					e.printStackTrace();
@@ -193,32 +198,32 @@ public class VideoFrame extends CanvasFrame implements VideoActions {
 	private void setTextPosition() {
 		switch (settings.getFontPosition()) {
 		case SettingsDialog.UP_LEFT:
-			xPoint = (RESOLUTION_WIDTH / 8) - (RESOLUTION_WIDTH / 16);
-			yPoint = (RESOLUTION_HEIGHT / 10);
+			xPoint = (DISPLAY_WIDTH / 8) - (DISPLAY_WIDTH / 16);
+			yPoint = (DISPLAY_HEIGHT / 10);
 			break;
 		case SettingsDialog.UP_CENTER:
-			xPoint = 4 * (RESOLUTION_WIDTH / 10);
-			yPoint = (RESOLUTION_HEIGHT / 10);
+			xPoint = 4 * (DISPLAY_WIDTH / 10);
+			yPoint = (DISPLAY_HEIGHT / 10);
 			break;
 		case SettingsDialog.UP_RIGHT:
-			xPoint = 5 * (RESOLUTION_WIDTH / 8);
-			yPoint = (RESOLUTION_HEIGHT / 10);
+			xPoint = 5 * (DISPLAY_WIDTH / 8);
+			yPoint = (DISPLAY_HEIGHT / 10);
 			break;
 		case SettingsDialog.DOWN_LEFT:
-			xPoint = (RESOLUTION_WIDTH / 8) - (RESOLUTION_WIDTH / 16);
-			yPoint = 9 * (RESOLUTION_HEIGHT / 10);
+			xPoint = (DISPLAY_WIDTH / 8) - (DISPLAY_WIDTH / 16);
+			yPoint = 9 * (DISPLAY_HEIGHT / 10);
 			break;
 		case SettingsDialog.DOWN_CENTER:
-			xPoint = 4 * (RESOLUTION_WIDTH / 10);
-			yPoint = 9 * (RESOLUTION_HEIGHT / 10);
+			xPoint = 4 * (DISPLAY_WIDTH / 10);
+			yPoint = 9 * (DISPLAY_HEIGHT / 10);
 			break;
 		case SettingsDialog.DOWN_RIGHT:
-			xPoint = 5 * (RESOLUTION_WIDTH / 8);
-			yPoint = 9 * (RESOLUTION_HEIGHT / 10);
+			xPoint = 5 * (DISPLAY_WIDTH / 8);
+			yPoint = 9 * (DISPLAY_HEIGHT / 10);
 			break;
 		default:
-			xPoint = 4 * (RESOLUTION_WIDTH / 8);
-			yPoint = 6 * (RESOLUTION_HEIGHT / 10);
+			xPoint = 4 * (DISPLAY_WIDTH / 8);
+			yPoint = 6 * (DISPLAY_HEIGHT / 10);
 			break;
 		}
 	}

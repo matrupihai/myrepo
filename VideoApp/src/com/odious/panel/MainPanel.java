@@ -10,12 +10,12 @@ import net.miginfocom.swing.MigLayout;
 
 import com.odious.util.VideoVisitable;
 import com.odious.util.VideoVisitor;
-import com.odious.video.VideoFrame;
+import com.odious.video.VideoPanel;
 
 public class MainPanel extends JPanel implements VideoVisitable {
 	public static final Color BASE_COLOR = new Color(140, 140, 140);
 	
-	private VideoFrame video;
+	private VideoPanel video;
 	private LocationPanel locationPanel;
 	private DataPanel dataPanel;
 	private VideoControlPanel videoPanel;
@@ -55,14 +55,14 @@ public class MainPanel extends JPanel implements VideoVisitable {
 	
 	private void initVideoPanel() {
 		videoPanel = new VideoControlPanel();
-		leftPanel.add(videoPanel, "top, left, wrap");
+		leftPanel.add(videoPanel, "wrap");
 	}
 	
 	public String getGeoLocation() {
 		return locationPanel.getGeoLocation();
 	}
 	
-	public void setVideoFrame(VideoFrame video) {
+	public void setVideo(VideoPanel video) {
 		this.video = video;
 		videoPanel.setVideoFrame(video);
 	}

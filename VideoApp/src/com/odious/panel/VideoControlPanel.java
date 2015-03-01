@@ -14,12 +14,12 @@ import net.miginfocom.swing.MigLayout;
 
 import com.odious.gui.CustomButton;
 import com.odious.model.CustomComboBoxModel;
-import com.odious.video.VideoFrame;
-import com.odious.video.VideoFrame.Status;
+import com.odious.video.VideoPanel;
+import com.odious.video.VideoPanel.Status;
 import com.odious.video.VideoHelper;
 
 public class VideoControlPanel extends JPanel {
-	private VideoFrame video;
+	private VideoPanel video;
 
 	public VideoControlPanel() {
 		JPanel panelControls = new JPanel(new MigLayout());
@@ -42,7 +42,7 @@ public class VideoControlPanel extends JPanel {
 			public void actionPerformed(ActionEvent a) {
 				if (!comboModel.getElementAt(0).equals(VideoHelper.NO_SOURCE)) {
 					if (video.getStatus() == Status.STOPPED) {
-						final VideoFrame.CameraSwingWorker camera = video.new CameraSwingWorker();
+						final VideoPanel.CameraSwingWorker camera = video.new CameraSwingWorker();
 						camera.execute();
 						System.out.println("Camera started!");
 						video.repaint();
@@ -172,7 +172,7 @@ public class VideoControlPanel extends JPanel {
 
 	}
 
-	public void setVideoFrame(VideoFrame video) {
+	public void setVideoFrame(VideoPanel video) {
 		this.video = video;
 	}
 

@@ -10,7 +10,7 @@ public class VideoApp {
 
 			@Override
 			public void run() {
-				AppFrame frame = new AppFrame();
+				new AppFrame();
 			}
 		});
 

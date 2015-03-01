@@ -12,13 +12,13 @@ import com.odious.panel.MainPanel;
 import com.odious.panel.SettingsDialog;
 import com.odious.util.VideoSettings;
 
-public class AppFrame {
+public class AppFrame extends JFrame {
 	
 	public Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
 	public int width = screenSize.width;
 	public int height = screenSize.height;
 	
-	private VideoFrame video = VideoFrame.newInstance();;
+	private VideoPanel video = VideoPanel.newInstance();
 	private MainPanel panel;
 	private SettingsDialog settingsDialog;
 	
@@ -28,42 +28,47 @@ public class AppFrame {
 	
 	private void initGui() {
 		CustomUI.setCustomUI();
-		settingsDialog = new SettingsDialog(video);
+		setExtendedState(JFrame.MAXIMIZED_BOTH);
+		settingsDialog = new SettingsDialog(this);
 		
 		initVideo();
 		initMenuBar();
 		initMainPanel();
+		initSettings();
 		
-		VideoSettings settings = new VideoSettings();
-		settings.visit(panel);
-		settings.visit(settingsDialog);
-		video.setSettings(settings);
-		
-		video.setVisible(true);
+		setVisible(true);
 	}
 	
 	private void initVideo() {
-		video.setExtendedState(JFrame.MAXIMIZED_BOTH);
+		video.setPreferredSize(new Dimension(2*(width/3), height));
+		add(video, BorderLayout.CENTER);
 	}
 	
 	private void initMainPanel() {
 		panel = new MainPanel();
-		panel.setPreferredSize(new Dimension(width/5, height));
-		panel.setVideoFrame(video);
-		video.getContentPane().add(panel, BorderLayout.EAST);
+		panel.setPreferredSize(new Dimension(width/3, height));
+		add(panel, BorderLayout.EAST);
+		panel.setVideo(video);
 	}
 	
 	private void initMenuBar() {
 		AppMenuBar bar = new AppMenuBar();
 		bar.setAppFrame(this);
-		video.setJMenuBar(bar.getMenuBar());
+		setJMenuBar(bar.getMenuBar());
+	}
+	
+	private void initSettings() {
+		VideoSettings settings = new VideoSettings();
+		settings.visit(panel);
+		settings.visit(settingsDialog);
+		video.setSettings(settings);
 	}
 	
 	public SettingsDialog getSettingsDialog() {
 		return settingsDialog;
 	}
 
-	public VideoFrame getVideo() {
+	public VideoPanel getVideo() {
 		return video;
 	}
 	

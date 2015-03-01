@@ -27,6 +27,7 @@ import com.odious.util.VideoVisitor;
 
 public class SettingsDialog extends JDialog implements VideoVisitable {
 	private static final long serialVersionUID = 7526472295622776147L;
+	
 	public static final String SETTINGS_FILENAME = "settings.egb";
 	public static final String UP_LEFT = "sus-stanga";
 	public static final String UP_CENTER = "sus-centru";
@@ -131,9 +132,9 @@ public class SettingsDialog extends JDialog implements VideoVisitable {
 	}
 
 	private JPanel loadButtons() {
-		JPanel buttonsPanel = new JPanel(null);
+		JPanel buttonsPanel = new JPanel();
 		okButton = new JButton("Ok");
-		okButton.setPreferredSize(new Dimension(50, 15));
+		okButton.setPreferredSize(new Dimension(100, 30));
 		okButton.addActionListener(new ActionListener() {
 
 			@Override
@@ -144,7 +145,7 @@ public class SettingsDialog extends JDialog implements VideoVisitable {
 		});
 
 		cancelButton = new JButton("Cancel");
-		cancelButton.setPreferredSize(new Dimension(50, 15));
+		cancelButton.setPreferredSize(new Dimension(100, 30));
 		cancelButton.addActionListener(new ActionListener() {
 
 			@Override
