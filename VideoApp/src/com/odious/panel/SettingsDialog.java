@@ -26,7 +26,9 @@ import com.odious.util.VideoVisitable;
 import com.odious.util.VideoVisitor;
 
 public class SettingsDialog extends JDialog implements VideoVisitable {
-	private static final long serialVersionUID = 7526472295622776147L;
+//	private static final long serialVersionUID = 7526472295622776147L;
+	
+	private static SettingsDialog INSTANCE = new SettingsDialog();
 	
 	public static final String SETTINGS_FILENAME = "settings.egb";
 	public static final String UP_LEFT = "sus-stanga";
@@ -44,8 +46,12 @@ public class SettingsDialog extends JDialog implements VideoVisitable {
 	private String filePath = null;
 
 	private UserSettings userSettings;
+	
+	public static SettingsDialog getInstance() {
+		return INSTANCE;
+	}
 
-	public SettingsDialog(JFrame parent) {
+	private SettingsDialog() {
 		getContentPane().setLayout(new BorderLayout());
 
 		JPanel containerPanel = new JPanel(new BorderLayout());

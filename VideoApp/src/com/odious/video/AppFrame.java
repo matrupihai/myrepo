@@ -29,7 +29,7 @@ public class AppFrame extends JFrame {
 	private void initGui() {
 		CustomUI.setCustomUI();
 		setExtendedState(JFrame.MAXIMIZED_BOTH);
-		settingsDialog = new SettingsDialog(this);
+		settingsDialog = SettingsDialog.getInstance();
 		
 		initVideo();
 		initMenuBar();

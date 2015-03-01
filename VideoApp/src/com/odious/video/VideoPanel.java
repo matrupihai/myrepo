@@ -108,6 +108,7 @@ public class VideoPanel extends JPanel implements VideoActions {
 		CvMemStorage storage = CvMemStorage.create();
 		grabbedImage = grabber.grab();
 		
+		
 		videoFileManager = new VideoFileManager(settings.getSettingsFilePath(), settings.getGeoLocation());
 		videoFile = videoFileManager.getVideoFile();
 //		recorder = new OpenCVFrameRecorder(videoFile, RESOLUTION_WIDTH, RESOLUTION_HEIGHT);
@@ -119,6 +120,8 @@ public class VideoPanel extends JPanel implements VideoActions {
 		CvFont font = new CvFont(CV_FONT_HERSHEY_TRIPLEX, settings.getFontSize(), 1);
 		while (status.equals(Status.STARTED) && (grabbedImage = grabber.grab()) != null) {
 			cvClearMemStorage(storage);
+			settings.visit(SettingsDialog.getInstance());
+			
 //			displayedNumber = ModbusReader.getValue();
 			displayedNumber = 255;
 			setTextColor();
@@ -138,6 +141,7 @@ public class VideoPanel extends JPanel implements VideoActions {
 //			if(EGB1.isInvertChecked()){
 //				cvNot(grabbedImage, grabbedImage);
 //			}
+			
 			
 			image.setIcon(new ImageIcon(grabbedImage.getBufferedImage()));
 			image.repaint();
