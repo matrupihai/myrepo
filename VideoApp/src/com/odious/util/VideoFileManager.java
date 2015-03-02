@@ -34,12 +34,14 @@ public class VideoFileManager {
 	}
 	
 	public void deleteScreenshotDir() {
+		System.out.println("SCREEENSHOT: " + screenshotDir.exists());
 		if (screenshotDir.exists() && screenshotDir.list().length == 0) {
 			screenshotDir.delete();
 		}
 	}
 	
 	public void deleteTempVideo() {
+		System.out.println("VIDEO: " + videoFile);
 		if (videoFile != null && videoFile.length() < 1024) {
 			System.out.println("Temp file deleted: " + videoFile.delete());
 		}

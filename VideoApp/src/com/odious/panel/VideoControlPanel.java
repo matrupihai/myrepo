@@ -172,7 +172,7 @@ public class VideoControlPanel extends JPanel {
 
 	}
 
-	public void setVideoFrame(VideoPanel video) {
+	public void setVideo(VideoPanel video) {
 		this.video = video;
 	}
 

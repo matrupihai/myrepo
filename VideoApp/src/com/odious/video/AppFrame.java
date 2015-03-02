@@ -3,8 +3,10 @@ package com.odious.video;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.Toolkit;
+import java.awt.event.WindowEvent;
 
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 
 import com.odious.gui.CustomUI;
 import com.odious.panel.AppMenuBar;
@@ -72,6 +74,24 @@ public class AppFrame extends JFrame {
 		return settingsDialog;
 	}
 
+	public void clearResourcesOnExit() {
+		int exit = JOptionPane.showConfirmDialog(getRootPane(), "Exit?");
+		if (exit == JOptionPane.YES_OPTION) {
+			video.clearVideoResources();
+			System.exit(0);
+			dispose();
+		} else {
+			System.exit(0);
+		}
+	}
+	
+	@Override
+	protected void processWindowEvent(WindowEvent e) {
+		if (e.getID() == WindowEvent.WINDOW_CLOSING) {
+			clearResourcesOnExit();
+		}
+	}
+	
 	public VideoPanel getVideo() {
 		return video;
 	}

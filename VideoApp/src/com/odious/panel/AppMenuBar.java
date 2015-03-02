@@ -25,7 +25,7 @@ public class AppMenuBar {
 		fileExitMenuItem.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				
+				appFrame.clearResourcesOnExit();
 			}
 		});
 
