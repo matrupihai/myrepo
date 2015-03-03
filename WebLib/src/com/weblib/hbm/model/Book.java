@@ -18,10 +18,13 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import org.codehaus.jackson.annotate.JsonIgnore;
+import org.codehaus.jackson.annotate.JsonIgnoreProperties;
+import org.codehaus.jackson.annotate.JsonManagedReference;
 
 
 @Entity
 @Table (name="DBA.\"102_BOOKS\"")
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class Book {
 	@Id
 	@Column (name = "isbn")
@@ -48,7 +51,7 @@ public class Book {
 				inverseJoinColumns = @JoinColumn(name = "author_id"))
 	private Set<Author> authors = new HashSet<Author>();
 	
-	@JsonIgnore
+	@JsonManagedReference ("copies")
 	@OneToMany (fetch = FetchType.LAZY, mappedBy = "book", cascade = CascadeType.ALL)
 	private Set<BookCopy> copies = new HashSet<BookCopy>();
 	

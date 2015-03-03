@@ -33,9 +33,9 @@ public class UserResource {
 	
 	@GET
 	@Produces (MediaType.APPLICATION_JSON)
-	@Path ("{id}/loans")
-	public String getLoansByUserId(@PathParam("id") Integer id) {
-		return JsonHelper.objectToJson(dao.findBooksBorrowedByUser(id));
+	@Path ("{id}/copies")
+	public String getBorrowedByUser(@PathParam("id") Integer id) {
+		return JsonHelper.objectToJson(dao.findBorrowedByUser(id));
 	}
 	
 }

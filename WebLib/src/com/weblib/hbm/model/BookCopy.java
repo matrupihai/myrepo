@@ -13,9 +13,11 @@ import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 import org.codehaus.jackson.annotate.JsonIgnore;
+import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 
 @Entity
 @Table (name = "DBA.\"104_BOOKS_COPIES\"")
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class BookCopy {
 	@Id
 	@Column (name = "copy_id")
@@ -27,6 +29,7 @@ public class BookCopy {
 	@JoinColumn (name = "isbn")
 	private Book book;
 	
+	@JsonIgnore
 	@OneToOne (fetch = FetchType.LAZY, mappedBy = "bookCopy", cascade = CascadeType.ALL)
 	private Loan loan;
 	
