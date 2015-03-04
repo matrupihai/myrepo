@@ -25,6 +25,4 @@ public class UserDAOImpl extends GenericDAOImpl<User, Integer> {
 		return user.getLoans();
 	}
 	
-	
-	
 }

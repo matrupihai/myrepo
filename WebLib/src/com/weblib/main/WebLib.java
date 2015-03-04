@@ -1,6 +1,5 @@
 package com.weblib.main;
 
-import com.weblib.dao.AuthorDAOImpl;
 import com.weblib.dao.BookDAOImpl;
 import com.weblib.dao.PublisherDAOImpl;
 import com.weblib.hbm.model.Author;

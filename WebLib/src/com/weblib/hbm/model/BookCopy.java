@@ -14,6 +14,7 @@ import javax.persistence.Table;
 
 import org.codehaus.jackson.annotate.JsonIgnore;
 import org.codehaus.jackson.annotate.JsonIgnoreProperties;
+import org.codehaus.jackson.annotate.JsonManagedReference;
 
 @Entity
 @Table (name = "DBA.\"104_BOOKS_COPIES\"")
@@ -24,7 +25,7 @@ public class BookCopy {
 	@GeneratedValue (strategy = GenerationType.AUTO)
 	int copyId;
 	
-	@JsonIgnore
+	@JsonManagedReference
 	@ManyToOne (fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	@JoinColumn (name = "isbn")
 	private Book book;
