@@ -8,6 +8,9 @@ import com.weblib.hbm.model.Publisher;
 
 public class WebLib {
 	
+	public WebLib() {}
+	
+	
 	public static void main(String[] args) {
 //		findBooksByAuthor("osbuc");
 	}
