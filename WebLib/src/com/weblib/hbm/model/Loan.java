@@ -18,6 +18,8 @@ import javax.persistence.TemporalType;
 
 import org.codehaus.jackson.annotate.JsonManagedReference;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 @Entity
 @Table (name = "DBA.\"106_LOANS\"")
 public class Loan {
@@ -26,8 +28,9 @@ public class Loan {
 	@GeneratedValue (strategy = GenerationType.AUTO)
 	private int loanId;
 	
-	@Temporal (TemporalType.TIMESTAMP)
 	@Column (name = "due_date")
+	@Temporal (TemporalType.TIMESTAMP)
+	@JsonFormat (shape = JsonFormat.Shape.STRING, pattern="yyyy-MM-dd,HH:00", timezone="GMT")
 	private Date dueDate;
 	
 	@JsonManagedReference

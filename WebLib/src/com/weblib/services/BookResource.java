@@ -6,9 +6,9 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 
 import com.weblib.dao.BookDAOImpl;
-import com.weblib.json.JsonHelper;
 
 @Path ("/books")
 public class BookResource {
@@ -16,26 +16,26 @@ public class BookResource {
 	
 	@GET
 	@Produces (MediaType.APPLICATION_JSON)
-	public String getAllBooks(@QueryParam ("title") String title) {
+	public Response getAllBooks(@QueryParam ("title") String title) {
 		if (title != null) {
-			return JsonHelper.objectToJson(dao.findBookByTitle(title));
+			return Response.ok(dao.findBookByTitle(title)).build();
 		}
 		
-		return JsonHelper.objectToJson(dao.getAllBooks());
+		return Response.ok(dao.getAllBooks()).build();
 	}
 	
 	@GET
 	@Produces (MediaType.APPLICATION_JSON)
 	@Path ("{isbn}")
-	public String getBookById(@PathParam("isbn") Integer isbn) {
-		return JsonHelper.objectToJson(dao.findBookByIsbn(isbn));
+	public Response getBookById(@PathParam("isbn") Integer isbn) {
+		return Response.ok(dao.findBookByIsbn(isbn)).build();
 	}
 	
 	@GET
 	@Produces (MediaType.APPLICATION_JSON)
 	@Path ("{isbn}/copies")
-	public String getBookCopies(@PathParam("isbn") Integer isbn) {
-		return JsonHelper.objectToJson(dao.findBookCopies(isbn));
+	public Response getBookCopies(@PathParam("isbn") Integer isbn) {
+		return Response.ok(dao.findBookCopies(isbn)).build();
 	}
 	
 }
