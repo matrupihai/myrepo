@@ -21,6 +21,7 @@
 		<mapping class="com.weblib.hbm.model.BookCopy" />
 		<mapping class="com.weblib.hbm.model.User" />
 		<mapping class="com.weblib.hbm.model.Loan" />
-
+		<mapping class="com.weblib.hbm.model.Subject" />
+		
 	</session-factory>
 </hibernate-configuration>

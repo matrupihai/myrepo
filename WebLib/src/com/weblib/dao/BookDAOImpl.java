@@ -23,18 +23,10 @@ public class BookDAOImpl extends GenericDAOImpl<Book, Integer> {
 	}
 
 	public Book findBookByIsbn(Integer isbn) {
-		if (isbn == null) {
-			throw new IllegalArgumentException("A book isbn cannot be null");
-		}
-
 		return findById(isbn);
 	}
 
 	public Set<BookCopy> findBookCopies(Integer isbn) {
-		if (isbn == null) {
-			throw new IllegalArgumentException("A book isbn cannot be null");
-		}
-
 		Book book = findBookByIsbn(isbn);
 		if (book != null) {
 			return book.getCopies();

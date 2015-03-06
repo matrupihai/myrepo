@@ -14,7 +14,7 @@ import javax.persistence.Id;
 import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 
-import org.codehaus.jackson.annotate.JsonIgnore;
+import org.codehaus.jackson.annotate.JsonBackReference;
 
 @Entity
 @Table (name="DBA.\"100_AUTHORS\"")
@@ -28,7 +28,7 @@ public class Author implements Serializable {
 	@Column (name="author_name")
 	private String authorName;
 	
-	@JsonIgnore
+	@JsonBackReference
 	@ManyToMany (fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "authors")
 	private Set<Book> books = new HashSet<Book>();
 	

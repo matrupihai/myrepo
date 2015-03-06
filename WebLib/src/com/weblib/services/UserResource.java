@@ -16,7 +16,7 @@ public class UserResource {
 	
 	@GET
 	@Produces (MediaType.APPLICATION_JSON)
-	public Response getAllUsers(@QueryParam ("title") String userName) {
+	public Response getAllUsers(@QueryParam ("userName") String userName) {
 		if (userName != null) {
 			return Response.ok(dao.findByName(userName)).build();
 		}

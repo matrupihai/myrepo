@@ -20,6 +20,7 @@ import javax.persistence.Table;
 import org.codehaus.jackson.annotate.JsonBackReference;
 import org.codehaus.jackson.annotate.JsonIgnore;
 import org.codehaus.jackson.annotate.JsonIgnoreProperties;
+import org.codehaus.jackson.annotate.JsonManagedReference;
 
 
 @Entity
@@ -45,11 +46,17 @@ public class Book {
 	@JoinColumn (name = "publisher_id")
 	private Publisher publisher;
 	
+	@JsonManagedReference
+	@ManyToMany (fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@JoinTable (name = "DBA.\"103_BOOKS_AUTHORS\"", joinColumns = @JoinColumn (name = "isbn"), 
+				inverseJoinColumns = @JoinColumn (name = "author_id"))
+	private Set<Author> authors = new HashSet<Author>();
+	
 	@JsonIgnore
 	@ManyToMany (fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-	@JoinTable (name = "DBA.\"103_BOOKS_AUTHORS\"", joinColumns = @JoinColumn(name = "isbn"), 
-				inverseJoinColumns = @JoinColumn(name = "author_id"))
-	private Set<Author> authors = new HashSet<Author>();
+	@JoinTable (name = "DBA.\"108_BOOKS_SUBJECTS\"", joinColumns = @JoinColumn (name = "isbn"), 
+				inverseJoinColumns = @JoinColumn (name = "subject_id"))
+	private Set<Subject> subjects = new HashSet<Subject>();
 	
 	@JsonBackReference
 	@OneToMany (fetch = FetchType.LAZY, mappedBy = "book", cascade = CascadeType.ALL)
@@ -115,15 +122,13 @@ public class Book {
 	public String toString() {
 		return getTitle() + ", " + getYearPublished();
 	}
-	
+
 	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
 		result = prime * result + isbn;
 		result = prime * result + noOfPages;
-		result = prime * result
-				+ ((publisher == null) ? 0 : publisher.hashCode());
 		result = prime * result + ((title == null) ? 0 : title.hashCode());
 		result = prime * result + yearPublished;
 		return result;
@@ -142,11 +147,6 @@ public class Book {
 			return false;
 		if (noOfPages != other.noOfPages)
 			return false;
-		if (publisher == null) {
-			if (other.publisher != null)
-				return false;
-		} else if (!publisher.equals(other.publisher))
-			return false;
 		if (title == null) {
 			if (other.title != null)
 				return false;
@@ -156,6 +156,7 @@ public class Book {
 			return false;
 		return true;
 	}
-
+	
+	
 	
 }
