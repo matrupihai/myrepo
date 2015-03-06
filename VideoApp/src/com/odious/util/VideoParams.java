@@ -6,7 +6,7 @@ import java.beans.PropertyChangeListener;
 import com.odious.panel.SettingsDialog;
 
 
-public class VideoSettings implements PropertyChangeListener {
+public class VideoParams implements PropertyChangeListener {
 	private int framerate;
 	private String geoLocation;
 	private String settingsFilePath;
@@ -14,7 +14,7 @@ public class VideoSettings implements PropertyChangeListener {
 	private String fontColor;
 	private String fontPosition;
 	
-	public VideoSettings(SettingsDialog dialog) {
+	public VideoParams(SettingsDialog dialog) {
 		this.settingsFilePath = dialog.getFilePath();
 		this.fontSize = dialog.getFontSize();
 		this.fontColor = dialog.getFontColor();

@@ -26,19 +26,19 @@ import com.googlecode.javacv.cpp.opencv_highgui;
 import com.googlecode.javacv.cpp.opencv_objdetect;
 import com.odious.panel.SettingsDialog;
 import com.odious.util.VideoFileManager;
-import com.odious.util.VideoSettings;
+import com.odious.util.VideoParams;
 
 public class VideoPanel extends JPanel implements VideoActions {
 	
-	public static final int DISPLAY_WIDTH = 1280;
-	public static final int DISPLAY_HEIGHT = 720;
+	public static final int RESOLUTION_WIDTH = 1280;
+	public static final int RESOLUTION_HEIGHT = 720;
 	
 	private FrameGrabber grabber;
 	private FrameRecorder recorder;
 	private IplImage grabbedImage;
 	private int deviceId;
 	
-	private VideoSettings settings;
+	private VideoParams params;
 
 	public enum Status {
 		STARTED,
@@ -66,23 +66,23 @@ public class VideoPanel extends JPanel implements VideoActions {
 		add(image, BorderLayout.CENTER);
 	}
 
-	public void setSettings(VideoSettings settings) {
-		this.settings = settings;
+	public void setParams(VideoParams params) {
+		this.params = params;
 	}
 	
 	@Override
 	public void pause() {
-		
+		this.status = Status.PAUSED;
 	}
 
 	@Override
 	public void stop() {
-		
+		this.status = Status.STOPPED;
 	}
 
 	@Override
 	public void record() {
-		
+		this.status = Status.RECORDING;
 	}
 
 	public Status getStatus() {
@@ -100,8 +100,9 @@ public class VideoPanel extends JPanel implements VideoActions {
 		Loader.load(opencv_objdetect.class);
 		try {
 			grabber = FrameGrabber.createDefault(deviceId);
-			grabber.setImageWidth(DISPLAY_WIDTH);
-			grabber.setImageHeight(DISPLAY_HEIGHT);
+			grabber.setImageWidth(RESOLUTION_WIDTH);
+			grabber.setImageHeight(RESOLUTION_HEIGHT);
+			grabber.setFrameRate(params.getFramerate());
 			grabber.start();
 		} catch (FrameGrabber.Exception e) {
 			e.printStackTrace();
@@ -111,17 +112,17 @@ public class VideoPanel extends JPanel implements VideoActions {
 		grabbedImage = grabber.grab();
 		
 		
-		videoFileManager = new VideoFileManager(settings.getSettingsFilePath(), settings.getGeoLocation());
+		videoFileManager = new VideoFileManager(params.getSettingsFilePath(), params.getGeoLocation());
 		videoFile = videoFileManager.getVideoFile();
-		recorder = FrameRecorder.createDefault(videoFile, DISPLAY_WIDTH, DISPLAY_HEIGHT);
+		recorder = FrameRecorder.createDefault(videoFile, RESOLUTION_WIDTH, RESOLUTION_HEIGHT);
 		recorder.setVideoCodec(opencv_highgui.CV_FOURCC('M','P','4','2'));
-		recorder.setFrameRate(settings.getFramerate());
+		recorder.setFrameRate(params.getFramerate());
 		recorder.start();
 		
 		Dimension videoDimension = AppFrame.getVideoDimension();
 		
-		CvFont font = new CvFont(CV_FONT_HERSHEY_TRIPLEX, settings.getFontSize(), 1);
-		while (status.equals(Status.STARTED) && (grabbedImage = grabber.grab()) != null) {
+		CvFont font = new CvFont(CV_FONT_HERSHEY_TRIPLEX, params.getFontSize(), 1);
+		while (!status.equals(Status.STOPPED) && (grabbedImage = grabber.grab()) != null) {
 			cvClearMemStorage(storage);
 			
 //			displayedNumber = ModbusReader.getValue();
@@ -130,7 +131,7 @@ public class VideoPanel extends JPanel implements VideoActions {
 			setTextPosition();
 			
 			//text
-			font.vscale((float) settings.getFontSize());
+			font.vscale((float) params.getFontSize());
 			cvPutText(grabbedImage, "" + displayedNumber + "m", cvPoint(xPoint, yPoint), font, color);
 			
 //			//contrast - 
@@ -178,12 +179,12 @@ public class VideoPanel extends JPanel implements VideoActions {
 		videoFileManager.deleteScreenshotDir();
 	}
 
-	public VideoSettings getSettings() {
-		return settings;
+	public VideoParams getSettings() {
+		return params;
 	}
 
 	private void setTextColor() {
-		switch (settings.getFontColor()) {
+		switch (params.getFontColor()) {
 		case "verde":
 			color = CvScalar.GREEN;
 			break;
@@ -203,34 +204,34 @@ public class VideoPanel extends JPanel implements VideoActions {
 	}
 
 	private void setTextPosition() {
-		switch (settings.getFontPosition()) {
+		switch (params.getFontPosition()) {
 		case SettingsDialog.UP_LEFT:
-			xPoint = (DISPLAY_WIDTH / 8) - (DISPLAY_WIDTH / 16);
-			yPoint = (DISPLAY_HEIGHT / 10);
+			xPoint = (RESOLUTION_WIDTH / 8) - (RESOLUTION_WIDTH / 16);
+			yPoint = (RESOLUTION_HEIGHT / 10);
 			break;
 		case SettingsDialog.UP_CENTER:
-			xPoint = 4 * (DISPLAY_WIDTH / 10);
-			yPoint = (DISPLAY_HEIGHT / 10);
+			xPoint = 4 * (RESOLUTION_WIDTH / 10);
+			yPoint = (RESOLUTION_HEIGHT / 10);
 			break;
 		case SettingsDialog.UP_RIGHT:
-			xPoint = 5 * (DISPLAY_WIDTH / 8);
-			yPoint = (DISPLAY_HEIGHT / 10);
+			xPoint = 5 * (RESOLUTION_WIDTH / 8);
+			yPoint = (RESOLUTION_HEIGHT / 10);
 			break;
 		case SettingsDialog.DOWN_LEFT:
-			xPoint = (DISPLAY_WIDTH / 8) - (DISPLAY_WIDTH / 16);
-			yPoint = 9 * (DISPLAY_HEIGHT / 10);
+			xPoint = (RESOLUTION_WIDTH / 8) - (RESOLUTION_WIDTH / 16);
+			yPoint = 9 * (RESOLUTION_HEIGHT / 10);
 			break;
 		case SettingsDialog.DOWN_CENTER:
-			xPoint = 4 * (DISPLAY_WIDTH / 10);
-			yPoint = 9 * (DISPLAY_HEIGHT / 10);
+			xPoint = 4 * (RESOLUTION_WIDTH / 10);
+			yPoint = 9 * (RESOLUTION_HEIGHT / 10);
 			break;
 		case SettingsDialog.DOWN_RIGHT:
-			xPoint = 5 * (DISPLAY_WIDTH / 8);
-			yPoint = 9 * (DISPLAY_HEIGHT / 10);
+			xPoint = 5 * (RESOLUTION_WIDTH / 8);
+			yPoint = 9 * (RESOLUTION_HEIGHT / 10);
 			break;
 		default:
-			xPoint = 4 * (DISPLAY_WIDTH / 8);
-			yPoint = 6 * (DISPLAY_HEIGHT / 10);
+			xPoint = 4 * (RESOLUTION_WIDTH / 8);
+			yPoint = 6 * (RESOLUTION_HEIGHT / 10);
 			break;
 		}
 	}

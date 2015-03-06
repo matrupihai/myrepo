@@ -12,7 +12,7 @@ import com.odious.gui.CustomUI;
 import com.odious.panel.AppMenuBar;
 import com.odious.panel.MainPanel;
 import com.odious.panel.SettingsDialog;
-import com.odious.util.VideoSettings;
+import com.odious.util.VideoParams;
 
 public class AppFrame extends JFrame {
 	
@@ -62,8 +62,8 @@ public class AppFrame extends JFrame {
 	}
 	
 	private void initSettings() {
-		VideoSettings settings = new VideoSettings(settingsDialog);
-		video.setSettings(settings);
+		VideoParams settings = new VideoParams(settingsDialog);
+		video.setParams(settings);
 	}
 	
 	public static Dimension getVideoDimension() {

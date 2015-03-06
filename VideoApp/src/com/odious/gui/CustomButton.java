@@ -23,22 +23,23 @@ public class CustomButton extends JButton {
 		setIcons(fileName, rolloverFileName, pressedFileName);
 	}
 	
-	private ImageIcon loadImageIcon(String fileName) throws IOException {
-		BufferedImage image = ImageIO.read(this.getClass().getClassLoader()
-							.getResourceAsStream("com/odious/images/" + fileName));
-
-		return new ImageIcon(image);
-	}
+//	private ImageIcon loadImageIcon(String fileName) throws IOException {
+//		BufferedImage image = ImageIO.read(this.getClass().getClassLoader()
+//							.getResourceAsStream("com/odious/images/" + fileName));
+//
+//		return new ImageIcon(image);
+//	}
 	
 	private void setIcons(String fileName, String rolloverFileName, String pressedFileName) {
 		if (fileName == null || rolloverFileName == null || pressedFileName == null) {
 			throw new IllegalArgumentException("A file name cannot be null");
 		}
 		
+		ImageHelper imageHelper = new ImageHelper();
 		try {
-			setIcon(loadImageIcon(fileName));
-			setRolloverIcon(loadImageIcon(rolloverFileName));
-			setPressedIcon(loadImageIcon(pressedFileName));
+			setIcon(imageHelper.loadImageIcon(fileName));
+			setRolloverIcon(imageHelper.loadImageIcon(rolloverFileName));
+			setPressedIcon(imageHelper.loadImageIcon(pressedFileName));
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
