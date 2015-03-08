@@ -35,6 +35,18 @@ public class VideoControlPanel extends JPanel {
 			hoverPauseRed, hoverRecord;
 	private JLabel sensorLabel;
 	private final JLabel chronoLabel = new JLabel("0:0:0");
+
+	private CustomComboBoxModel comboModel;
+
+	private CustomButton recordButton;
+
+	private CustomButton playButton;
+
+	private CustomButton stopButton;
+
+	private CustomButton refreshButton;
+
+	private JComboBox<String> comboDevices;
 	private static Timer timerChronos;
 	
 	static {
@@ -63,8 +75,8 @@ public class VideoControlPanel extends JPanel {
 		JPanel panelControls = new JPanel(new MigLayout());
 		panelControls.setBorder(BorderFactory.createLineBorder(MainPanel.BASE_COLOR, 1));
 		VideoHelper.detectVideoDevices();
-		final JComboBox<String> comboDevices = new JComboBox<String>();
-		final CustomComboBoxModel comboModel = new CustomComboBoxModel(
+		comboDevices = new JComboBox<String>();
+		comboModel = new CustomComboBoxModel(
 				VideoHelper.getDevices());
 		comboDevices.setModel(comboModel);
 		Dimension comboDimension = new Dimension(160, 30);
@@ -74,120 +86,57 @@ public class VideoControlPanel extends JPanel {
 		comboDevices.setSelectedIndex(0);
 		sensorLabel = new JLabel(sensorOff);
 		
-		CustomButton playButton = new CustomButton("play.png", "hoverPlay.png", "pressedPlay.png");
+		playButton = new CustomButton("play.png", "hoverPlay.png", "pressedPlay.png");
 		playButton.addActionListener(new ActionListener() {
 
 			@Override
 			public void actionPerformed(ActionEvent a) {
-				if (!comboModel.getElementAt(0).equals(VideoHelper.NO_SOURCE)) {
-					if (video != null && video.getStatus() == Status.STOPPED) {
-						final VideoPanel.CameraSwingWorker camera = video.new CameraSwingWorker();
-						camera.execute();
-						System.out.println("Camera started!");
-						// startSerial();
-						chronoLabel.setText("0:0:0");
-						KeyboardFocusManager manager = KeyboardFocusManager
-								.getCurrentKeyboardFocusManager();
-						// manager.addKeyEventDispatcher(video.new
-						// CustomDispatcher());
-					}
-				} else {
-					JOptionPane.showMessageDialog(getRootPane(),
-							"No video source!", "Error",
-							JOptionPane.ERROR_MESSAGE);
-				}
+				playAction();
 			}
 		});
-		final CustomButton recordButton = new CustomButton("/record.png",
+		recordButton = new CustomButton("/record.png",
 				"/hoverRecord.png", "/pressedRecord.png");
 		recordButton.addActionListener(new ActionListener() {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				if (video != null) {
-//					writeToFile(videoFrame.getVideoDestination() + "info.txt",
-//							getFieldsData());
-					Status status = video.getStatus();
-					if (status.equals(Status.RECORDING)) {
-						video.pause();
-						sensorLabel.setIcon(sensorOff);
-						recordButton.setIcon(hoverPauseRed);
-						recordButton.setRolloverIcon(hoverPauseRed);
-						chronoLabel.setForeground(MainPanel.BASE_COLOR);
-						chronoLabel.repaint();
-						Chronometer.stop();
-						if (timerChronos != null) {
-							timerChronos.cancel();
-							timerChronos.purge();
-						}
-					} else {
-						video.record();
-						sensorLabel.setIcon(sensorOn);
-						chronoLabel.setForeground(new Color(255, 9, 9));
-						chronoLabel.repaint();
-						Chronometer.start();
-						getTime(chronoLabel, Chronometer.delayTime);
-						recordButton.setIcon(record);
-						recordButton.setRolloverIcon(hoverPause);
-						recordButton.setPressedIcon(pressedPause);
-					}
-				}
+				recordAction();
 			}
 		});
 		
-		CustomButton stopButton = new CustomButton("stop.png",
+		stopButton = new CustomButton("stop.png",
 				"hoverStop.png", "pressedStop.png");
 		stopButton.addActionListener(new ActionListener() {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				Status status = video.getStatus();
-				if (Status.RECORDING.equals(status) || Status.PAUSED.equals(status)) {
-					int option = JOptionPane.showConfirmDialog(getRootPane(),
-							"Stop recording?");
-					if (option == JOptionPane.YES_OPTION) {
-						video.stop();
-						sensorLabel.setIcon(sensorOff);
-						recordButton.setIcon(record);
-						recordButton.setRolloverIcon(hoverRecord);
-						chronoLabel.setForeground(MainPanel.BASE_COLOR);
-						chronoLabel.repaint();
-						Chronometer.stop();
-						Chronometer.delayTime = 0;
-						if (timerChronos != null) {
-							timerChronos.cancel();
-							timerChronos.purge();
-						}
-					}
-				}
+				stopAction();
 			}
 		});
 
-		CustomButton refreshButton = new CustomButton("refresh.png",
+		refreshButton = new CustomButton("refresh.png",
 				"hoverRefresh.png", "pressedRefresh.png");
 		refreshButton.addActionListener(new ActionListener() {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				VideoHelper.detectVideoDevices();
-				comboDevices.setModel(new CustomComboBoxModel(VideoHelper.getDevices()));
-				comboDevices.setSelectedIndex(0);
+				refreshAction();
 			}
 		});
 
-//		CustomButton screenshotButton = new CustomButton("/screenshot.png",
-//				"/hoverScreenshot.png", "/pressedScreenshot.png");
-//		screenshotButton.addActionListener(new ActionListener() {
-//
-//			@Override
-//			public void actionPerformed(ActionEvent e) {
-//				if (videoFrame != null) {
-//					videoFrame.getScreenshot();
-//				}
-//
-//			}
-//		});
-//
+		CustomButton screenshotButton = new CustomButton("screenshot.png",
+				"hoverScreenshot.png", "pressedScreenshot.png");
+		screenshotButton.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				if (video != null) {
+//					video.getScreenshot();
+				}
+
+			}
+		});
+
 		JPanel containerChronometer = new JPanel(new MigLayout());
 		chronoLabel.setFont(new Font("Arial", Font.PLAIN, 30));
 		chronoLabel.setForeground(MainPanel.BASE_COLOR);
@@ -201,7 +150,7 @@ public class VideoControlPanel extends JPanel {
 		buttonPanel.add(playButton, "west");
 		buttonPanel.add(recordButton, "west");
 		buttonPanel.add(stopButton, "west");
-//		buttonPanel.add(screenshotButton, "west");
+		buttonPanel.add(screenshotButton, "west");
 		panelControls.add(paramPanel, "wrap");
 		panelControls.add(buttonPanel, "wrap");
 		
@@ -210,6 +159,35 @@ public class VideoControlPanel extends JPanel {
 
 	}
 	
+	protected void refreshAction() {
+		VideoHelper.detectVideoDevices();
+		comboDevices.setModel(new CustomComboBoxModel(VideoHelper.getDevices()));
+		comboDevices.setSelectedIndex(0);
+	}
+
+	protected void stopAction() {
+		Status status = video.getStatus();
+		if (Status.RECORDING.equals(status) || Status.PAUSED.equals(status)) {
+			int option = JOptionPane.showConfirmDialog(getRootPane(),
+					"Stop recording?");
+			if (option == JOptionPane.YES_OPTION) {
+				video.stop();
+				sensorLabel.setIcon(sensorOff);
+				recordButton.setIcon(record);
+				recordButton.setRolloverIcon(hoverRecord);
+				chronoLabel.setForeground(MainPanel.BASE_COLOR);
+				chronoLabel.repaint();
+				Chronometer.stop();
+				Chronometer.delayTime = 0;
+				if (timerChronos != null) {
+					timerChronos.cancel();
+					timerChronos.purge();
+				}
+			}
+		}
+
+	}
+
 	public void getTime(final JLabel label, final int delay) {
 		timerChronos = new Timer();
 		TimerTask task = new TimerTask() {
@@ -225,5 +203,56 @@ public class VideoControlPanel extends JPanel {
 	public void setVideo(VideoPanel video) {
 		this.video = video;
 	}
-
+	
+	protected void playAction() {
+		if (!comboModel.getElementAt(0).equals(VideoHelper.NO_SOURCE)) {
+			if (video != null && video.getStatus() == Status.STOPPED) {
+				final VideoPanel.CameraSwingWorker camera = video.new CameraSwingWorker();
+				camera.execute();
+				System.out.println("Camera started!");
+				// startSerial();
+				chronoLabel.setText("0:0:0");
+				KeyboardFocusManager manager = KeyboardFocusManager
+						.getCurrentKeyboardFocusManager();
+				// manager.addKeyEventDispatcher(video.new
+				// CustomDispatcher());
+			}
+		} else {
+			JOptionPane.showMessageDialog(getRootPane(),
+					"No video source!", "Error",
+					JOptionPane.ERROR_MESSAGE);
+		}
+	}
+	
+	protected void recordAction() {
+		if (video != null) {
+//			writeToFile(videoFrame.getVideoDestination() + "info.txt",
+//					getFieldsData());
+			Status status = video.getStatus();
+			if (status.equals(Status.RECORDING)) {
+				video.pause();
+				sensorLabel.setIcon(sensorOff);
+				recordButton.setIcon(hoverPauseRed);
+				recordButton.setRolloverIcon(hoverPauseRed);
+				chronoLabel.setForeground(MainPanel.BASE_COLOR);
+				chronoLabel.repaint();
+				Chronometer.stop();
+				if (timerChronos != null) {
+					timerChronos.cancel();
+					timerChronos.purge();
+				}
+			} else {
+				video.record();
+				sensorLabel.setIcon(sensorOn);
+				chronoLabel.setForeground(new Color(255, 9, 9));
+				chronoLabel.repaint();
+				Chronometer.start();
+				getTime(chronoLabel, Chronometer.delayTime);
+				recordButton.setIcon(record);
+				recordButton.setRolloverIcon(hoverPause);
+				recordButton.setPressedIcon(pressedPause);
+			}
+		}
+	}
+	
 }

@@ -4,12 +4,20 @@ import static com.googlecode.javacv.cpp.opencv_core.CV_FONT_HERSHEY_TRIPLEX;
 import static com.googlecode.javacv.cpp.opencv_core.cvClearMemStorage;
 import static com.googlecode.javacv.cpp.opencv_core.cvPoint;
 import static com.googlecode.javacv.cpp.opencv_core.cvPutText;
+import static com.googlecode.javacv.cpp.opencv_highgui.cvSaveImage;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.image.BufferedImage;
 import java.io.File;
+import java.io.IOException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
+import javax.sound.sampled.AudioInputStream;
+import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.Clip;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -177,6 +185,49 @@ public class VideoPanel extends JPanel implements VideoActions {
 		}
 		videoFileManager.deleteTempVideo();
 		videoFileManager.deleteScreenshotDir();
+	}
+	
+	private void getScreenshot() {
+		if (grabbedImage != null) {
+//			String modbusValue = ModbusReader.getValue();
+			String modbusValue = "256";
+			String fileLocation = "Saturn";
+			File screenshotDir = videoFileManager.getScrenshotDir();
+			DateFormat time = new SimpleDateFormat("hh_mm_ss");
+			
+			if (screenshotDir.exists()) {
+				cvSaveImage(screenshotDir.getAbsolutePath() + "\\"
+						+ fileLocation + " " + modbusValue + "m "
+						+ "(ora " + time.format(new Date()) + ")" + ".jpg",
+						grabbedImage);
+			} else {
+				cvSaveImage(System.getProperty("user.dir") + "\\"
+						+ fileLocation + " " + modbusValue + "m "
+						+ "(ora " + time.format(new Date()) + ")" + ".jpg",
+						grabbedImage);
+			}
+			playSound("/snapshot.wav");
+		}
+	}
+	
+	public void playSound(String fileName) {
+		AudioInputStream inputStream = null;
+		try {
+			Clip clip = AudioSystem.getClip();
+			inputStream = AudioSystem.getAudioInputStream(getClass().getResource(fileName));
+			clip.open(inputStream);
+			clip.start();
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			if (inputStream != null) {
+				try {
+					inputStream.close();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
+		}
 	}
 
 	public VideoParams getSettings() {
