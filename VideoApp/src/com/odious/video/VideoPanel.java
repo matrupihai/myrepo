@@ -93,6 +93,10 @@ public class VideoPanel extends JPanel implements VideoActions {
 		this.status = Status.RECORDING;
 	}
 
+	public void screenshot() {
+		getScreenshot();
+	}
+	
 	public Status getStatus() {
 		return status;
 	}

@@ -30,8 +30,7 @@ import com.odious.video.VideoPanel.Status;
 public class VideoControlPanel extends JPanel {
 	private VideoPanel video;
 	
-	private static ImageIcon sensorOff, sensorOn, upActive, upInactive, downActive, 
-			downInactive, restActive, restInactive, record, hoverPause, pressedPause, 
+	private static ImageIcon sensorOff, sensorOn, record, hoverPause, pressedPause, 
 			hoverPauseRed, hoverRecord;
 	private JLabel sensorLabel;
 	private final JLabel chronoLabel = new JLabel("0:0:0");
@@ -55,12 +54,6 @@ public class VideoControlPanel extends JPanel {
 		try {
 			sensorOff = imgHelper.loadImageIcon("sensorOff.png");
 			sensorOn = imgHelper.loadImageIcon("sensorOn.png");
-			upActive = imgHelper.loadImageIcon("upActive.png");
-			upInactive = imgHelper.loadImageIcon("upInactive.png");
-			downActive = imgHelper.loadImageIcon("downActive.png");
-			downInactive = imgHelper.loadImageIcon("downInactive.png");
-			restActive = imgHelper.loadImageIcon("restActive.png");
-			restInactive = imgHelper.loadImageIcon("restInactive.png");
 			record = imgHelper.loadImageIcon("record.png");
 			hoverPause = imgHelper.loadImageIcon("hoverPause.png");
 			pressedPause = imgHelper.loadImageIcon("pressedPause.png");
@@ -130,10 +123,7 @@ public class VideoControlPanel extends JPanel {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				if (video != null) {
-//					video.getScreenshot();
-				}
-
+				screenshotAction();
 			}
 		});
 
@@ -185,23 +175,6 @@ public class VideoControlPanel extends JPanel {
 				}
 			}
 		}
-
-	}
-
-	public void getTime(final JLabel label, final int delay) {
-		timerChronos = new Timer();
-		TimerTask task = new TimerTask() {
-			
-			@Override
-			public void run() {
-				label.setText("" + Chronometer.getElapsedSeconds(delay));
-			}
-		};
-		timerChronos.schedule(task, 0, 1000);
-	}
-	
-	public void setVideo(VideoPanel video) {
-		this.video = video;
 	}
 	
 	protected void playAction() {
@@ -253,6 +226,28 @@ public class VideoControlPanel extends JPanel {
 				recordButton.setPressedIcon(pressedPause);
 			}
 		}
+	}
+	
+	public void screenshotAction() {
+		if (video != null) {
+			video.screenshot();
+		}
+	}
+	
+	public void getTime(final JLabel label, final int delay) {
+		timerChronos = new Timer();
+		TimerTask task = new TimerTask() {
+			
+			@Override
+			public void run() {
+				label.setText("" + Chronometer.getElapsedSeconds(delay));
+			}
+		};
+		timerChronos.schedule(task, 0, 1000);
+	}
+	
+	public void setVideo(VideoPanel video) {
+		this.video = video;
 	}
 	
 }
