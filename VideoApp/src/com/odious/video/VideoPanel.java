@@ -4,6 +4,9 @@ import static com.googlecode.javacv.cpp.opencv_core.CV_FONT_HERSHEY_TRIPLEX;
 import static com.googlecode.javacv.cpp.opencv_core.cvClearMemStorage;
 import static com.googlecode.javacv.cpp.opencv_core.cvPoint;
 import static com.googlecode.javacv.cpp.opencv_core.cvPutText;
+import static com.googlecode.javacv.cpp.opencv_core.cvScale;
+import static com.googlecode.javacv.cpp.opencv_core.cvAddS;
+import static com.googlecode.javacv.cpp.opencv_core.cvNot;
 import static com.googlecode.javacv.cpp.opencv_highgui.cvSaveImage;
 
 import java.awt.BorderLayout;
@@ -26,12 +29,14 @@ import javax.swing.SwingWorker;
 import com.googlecode.javacpp.Loader;
 import com.googlecode.javacv.FrameGrabber;
 import com.googlecode.javacv.FrameRecorder;
+import com.googlecode.javacv.OpenCVFrameRecorder;
 import com.googlecode.javacv.cpp.opencv_core.CvFont;
 import com.googlecode.javacv.cpp.opencv_core.CvMemStorage;
 import com.googlecode.javacv.cpp.opencv_core.CvScalar;
 import com.googlecode.javacv.cpp.opencv_core.IplImage;
 import com.googlecode.javacv.cpp.opencv_highgui;
 import com.googlecode.javacv.cpp.opencv_objdetect;
+import com.odious.modbus.ModbusReader;
 import com.odious.panel.SettingsDialog;
 import com.odious.util.VideoFileManager;
 import com.odious.util.VideoParams;
@@ -60,9 +65,12 @@ public class VideoPanel extends JPanel implements VideoActions {
 	private JLabel image;
 	private VideoFileManager videoFileManager;
 	private CvScalar color;
-	private int displayedNumber;
+	private float displayedNumber;
 	private int xPoint;
 	private int yPoint;
+	private double contrast;
+	private double brightness;
+	private boolean invert;
 	
 	public static VideoPanel newInstance() {
 		return new VideoPanel();
@@ -76,6 +84,7 @@ public class VideoPanel extends JPanel implements VideoActions {
 
 	public void setParams(VideoParams params) {
 		this.params = params;
+		videoFileManager = new VideoFileManager(params.getSettingsFilePath(), params.getGeoLocation());
 	}
 	
 	@Override
@@ -95,6 +104,18 @@ public class VideoPanel extends JPanel implements VideoActions {
 
 	public void screenshot() {
 		getScreenshot();
+	}
+	
+	public void contrast(double value) {
+		contrast = value;
+	}
+	
+	public void brightness(double value) {
+		brightness = value;
+	}
+	
+	public void invert(boolean value) {
+		invert = value;
 	}
 	
 	public Status getStatus() {
@@ -123,10 +144,9 @@ public class VideoPanel extends JPanel implements VideoActions {
 		CvMemStorage storage = CvMemStorage.create();
 		grabbedImage = grabber.grab();
 		
-		
-		videoFileManager = new VideoFileManager(params.getSettingsFilePath(), params.getGeoLocation());
 		videoFile = videoFileManager.getVideoFile();
-		recorder = FrameRecorder.createDefault(videoFile, RESOLUTION_WIDTH, RESOLUTION_HEIGHT);
+		recorder = new OpenCVFrameRecorder(videoFile, RESOLUTION_WIDTH, RESOLUTION_HEIGHT); 
+//		recorder = FrameRecorder.createDefault(videoFile, RESOLUTION_WIDTH, RESOLUTION_HEIGHT);
 		recorder.setVideoCodec(opencv_highgui.CV_FOURCC('M','P','4','2'));
 		recorder.setFrameRate(params.getFramerate());
 		recorder.start();
@@ -137,8 +157,7 @@ public class VideoPanel extends JPanel implements VideoActions {
 		while (!status.equals(Status.STOPPED) && (grabbedImage = grabber.grab()) != null) {
 			cvClearMemStorage(storage);
 			
-//			displayedNumber = ModbusReader.getValue();
-			displayedNumber = 255;
+			displayedNumber = ModbusReader.getValue();
 			setTextColor();
 			setTextPosition();
 			
@@ -146,16 +165,15 @@ public class VideoPanel extends JPanel implements VideoActions {
 			font.vscale((float) params.getFontSize());
 			cvPutText(grabbedImage, "" + displayedNumber + "m", cvPoint(xPoint, yPoint), font, color);
 			
-//			//contrast - 
-//			cvScale(grabbedImage, grabbedImage, EGB1.getContrastValue(), 0);
-//			
-//			//brightness - CvScalar(blue, green, red, nothing?)
-//			brightness = EGB1.getBrightnessValue();
-//			cvAddS(grabbedImage, new CvScalar(brightness, brightness, brightness, 0), grabbedImage, null);
-//			
-//			if(EGB1.isInvertChecked()){
-//				cvNot(grabbedImage, grabbedImage);
-//			}
+			//contrast
+			cvScale(grabbedImage, grabbedImage, contrast, 0);
+			
+			//brightness - CvScalar(blue, green, red, nothing?)
+			cvAddS(grabbedImage, new CvScalar(brightness, brightness, brightness, 0), grabbedImage, null);
+	
+			if (invert) {
+				cvNot(grabbedImage, grabbedImage);
+			}
 			
 			BufferedImage bufImage = grabbedImage.getBufferedImage();
 			bufImage = VideoHelper.resize(bufImage, videoDimension.width, videoDimension.height);
@@ -234,7 +252,7 @@ public class VideoPanel extends JPanel implements VideoActions {
 		}
 	}
 
-	public VideoParams getSettings() {
+	public VideoParams getParams() {
 		return params;
 	}
 

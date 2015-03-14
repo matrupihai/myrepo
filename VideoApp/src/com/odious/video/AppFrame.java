@@ -34,11 +34,11 @@ public class AppFrame extends JFrame {
 		CustomUI.setCustomUI();
 		setExtendedState(JFrame.MAXIMIZED_BOTH);
 		settingsDialog = SettingsDialog.getInstance();
+		initSettings();
 		
 		initVideo();
 		initMenuBar();
 		initMainPanel();
-		initSettings();
 		
 		setVisible(true);
 	}

@@ -13,6 +13,7 @@ public class VideoParams implements PropertyChangeListener {
 	private double fontSize;
 	private String fontColor;
 	private String fontPosition;
+	private int baud;
 	
 	public VideoParams(SettingsDialog dialog) {
 		this.settingsFilePath = dialog.getFilePath();
@@ -20,6 +21,7 @@ public class VideoParams implements PropertyChangeListener {
 		this.fontColor = dialog.getFontColor();
 		this.fontPosition = dialog.getFontPosition();
 		this.framerate = dialog.getFramerate();
+		this.baud = dialog.getBaud();
 		dialog.addChangeListener(this);
 	}
 	
@@ -40,6 +42,9 @@ public class VideoParams implements PropertyChangeListener {
 			break;
 		case "FRAMERATE":
 			this.framerate = (Integer) evt.getNewValue();
+			break;
+		case "BAUD":
+			this.baud = (Integer) evt.getNewValue();
 			break;
 		}
 	}
@@ -66,6 +71,10 @@ public class VideoParams implements PropertyChangeListener {
 
 	public String getGeoLocation() {
 		return geoLocation;
+	}
+
+	public int getBaud() {
+		return baud;
 	}
 	
 }	

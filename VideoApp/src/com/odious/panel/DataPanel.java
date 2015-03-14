@@ -20,7 +20,7 @@ public class DataPanel extends JPanel {
 		
 		JLabel labelDiameter = new JLabel("Diametru foraj");
 		JLabel labelType = new JLabel("Tip coloana foraj");
-		JTextField fieldDiameter = new JTextField(8);
+		JTextField fieldDiameter = new JTextField(4);
 		String[] diameter = { "mm", "toli" };
 		JComboBox<String> comboDiameter = new JComboBox<String>(diameter);
 		comboDiameter.setSelectedIndex(0);

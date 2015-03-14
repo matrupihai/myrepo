@@ -246,7 +246,14 @@ public class SettingsDialog extends JDialog {
 		JLabel baudLabel = new JLabel("Baudrate");
 		Integer[] baudValues = new Integer[] { 9600, 4800 };
 		baudCombo = new JComboBox<Integer>(baudValues);
-
+		baudCombo.addItemListener(new ItemListener() {
+			
+			@Override
+			public void itemStateChanged(ItemEvent e) {
+				notifyListeners(this, "BAUD", null, (Integer) e.getItem());
+			}
+		});
+		
 		serialPanel.add(baudLabel, "west, gapright 10");
 		serialPanel.add(baudCombo, "west");
 

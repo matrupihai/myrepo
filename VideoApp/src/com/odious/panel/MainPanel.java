@@ -20,12 +20,15 @@ public class MainPanel extends JPanel {
 	
 	JPanel leftPanel = new JPanel(new MigLayout());
 	JPanel rightPanel = new JPanel(new MigLayout());
+
+	private SerialPanel serialPanel;
 	
 	public MainPanel() {
 		setBackground(Color.WHITE);
 		setLayout(new BorderLayout());
 		
 		initVideoControlsPanel();
+		initSerialPanel();
 		initLocationPanel();
 		initDataPanel();
 		
@@ -48,7 +51,12 @@ public class MainPanel extends JPanel {
 	
 	private void initVideoControlsPanel() {
 		videoControlPanel = new VideoControlPanel();
-		leftPanel.add(videoControlPanel, "wrap");
+		leftPanel.add(videoControlPanel, "north, wrap");
+	}
+	
+	private void initSerialPanel() {
+		serialPanel = new SerialPanel();
+		leftPanel.add(serialPanel, "wrap");
 	}
 	
 	public String getGeoLocation() {
@@ -58,6 +66,7 @@ public class MainPanel extends JPanel {
 	public void setVideo(VideoPanel video) {
 		this.video = video;
 		videoControlPanel.setVideo(video);
+		serialPanel.setVideoParams(video.getParams());
 	}
-
+	
 }

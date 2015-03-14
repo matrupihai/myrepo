@@ -12,10 +12,16 @@ import java.util.TimerTask;
 
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
+import javax.swing.JButton;
+import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JSlider;
+import javax.swing.SwingConstants;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 
 import net.miginfocom.swing.MigLayout;
 
@@ -36,16 +42,18 @@ public class VideoControlPanel extends JPanel {
 	private final JLabel chronoLabel = new JLabel("0:0:0");
 
 	private CustomComboBoxModel comboModel;
-
 	private CustomButton recordButton;
-
 	private CustomButton playButton;
-
 	private CustomButton stopButton;
-
 	private CustomButton refreshButton;
 
 	private JComboBox<String> comboDevices;
+
+	private JSlider sliderContrast;
+
+	private JSlider sliderBrightness;
+
+	private JCheckBox invertCheck;
 	private static Timer timerChronos;
 	
 	static {
@@ -87,8 +95,8 @@ public class VideoControlPanel extends JPanel {
 				playAction();
 			}
 		});
-		recordButton = new CustomButton("/record.png",
-				"/hoverRecord.png", "/pressedRecord.png");
+		recordButton = new CustomButton("record.png",
+				"hoverRecord.png", "pressedRecord.png");
 		recordButton.addActionListener(new ActionListener() {
 
 			@Override
@@ -143,10 +151,82 @@ public class VideoControlPanel extends JPanel {
 		buttonPanel.add(screenshotButton, "west");
 		panelControls.add(paramPanel, "wrap");
 		panelControls.add(buttonPanel, "wrap");
+		panelControls.add(containerChronometer, "top, center, wrap");
+		panelControls.add(loadSlidersPanel(), "wrap");
 		
 		add(panelControls);
-		panelControls.add(containerChronometer, "top, center");
+	}
+	
+	private JPanel loadSlidersPanel() {
+		JPanel panel = new JPanel(new MigLayout());
+		
+		sliderContrast = new JSlider(SwingConstants.HORIZONTAL, 0, 500, 100);
+		sliderContrast.setMinorTickSpacing(10);
+		sliderContrast.addChangeListener(new ChangeListener() {
+			
+			@Override
+			public void stateChanged(ChangeEvent e) {
+				video.contrast(getContrastValue());
+			}
+		});
+		
+		sliderBrightness = new JSlider(SwingConstants.HORIZONTAL, -1800, 1800, 0);
+		sliderBrightness.setMinorTickSpacing(10);
+		sliderBrightness.addChangeListener(new ChangeListener() {
+			
+			@Override
+			public void stateChanged(ChangeEvent e) {
+				video.brightness(getBrightnessValue());
+			}
+		});
+		
+		invertCheck = new JCheckBox("Negativ");
+		invertCheck.addChangeListener(new ChangeListener() {
+			
+			@Override
+			public void stateChanged(ChangeEvent e) {
+				video.invert(isInvert());
+			}
+		});
+		
+		
+		JButton defaultButton = new JButton("Default");
+		defaultButton.addActionListener(new ActionListener() {
 
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				setDefaults();
+			}
+		});
+		
+		panel.add(new JLabel("Contrast"), "wrap");
+		panel.add(sliderContrast, "wrap");
+		panel.add(new JLabel("Luminozitate"), "wrap");
+		panel.add(sliderBrightness, "wrap");
+		
+		JPanel settings = new JPanel(new MigLayout());
+		settings.add(invertCheck, "west, gapright 20");
+		settings.add(defaultButton, "west");
+		panel.add(settings);
+
+		return panel;
+	}
+	
+	private void setDefaults() {
+		sliderContrast.setValue(100);
+		sliderBrightness.setValue(0);
+	}
+	
+	public double getContrastValue() {
+		return ((double) sliderContrast.getValue() / 100);
+	}
+
+	public double getBrightnessValue() {
+		return ((double) sliderBrightness.getValue() / 10);
+	}
+	
+	public boolean isInvert() {
+		return invertCheck.isSelected();
 	}
 	
 	protected void refreshAction() {
@@ -248,6 +328,8 @@ public class VideoControlPanel extends JPanel {
 	
 	public void setVideo(VideoPanel video) {
 		this.video = video;
+		this.video.contrast(getContrastValue());
+		this.video.brightness(getBrightnessValue());
 	}
 	
 }

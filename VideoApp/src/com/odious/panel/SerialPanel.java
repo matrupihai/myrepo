@@ -25,6 +25,7 @@ import net.miginfocom.swing.MigLayout;
 import com.odious.gui.CustomButton;
 import com.odious.gui.ImageHelper;
 import com.odious.modbus.ModbusReader;
+import com.odious.util.VideoParams;
 
 public class SerialPanel extends JPanel {
 	
@@ -32,6 +33,7 @@ public class SerialPanel extends JPanel {
 	private ModbusReader reader;
 	private Timer timerModbus;
 	private JLabel modbusLabel, restLabel, upLabel, downLabel;
+	private VideoParams params;
 	
 	static {
 		ImageHelper imgHelper = new ImageHelper();
@@ -54,8 +56,8 @@ public class SerialPanel extends JPanel {
 	private JLabel sensor;
 	
 	public SerialPanel() {
-		JPanel serialPanel = new JPanel(new MigLayout());
-		serialPanel.setBorder(BorderFactory.createLineBorder(MainPanel.BASE_COLOR));
+		JPanel containerPanel = new JPanel(new MigLayout());
+		containerPanel.setBorder(BorderFactory.createLineBorder(MainPanel.BASE_COLOR));
 		portCombo = new JComboBox<String>(getPortList());
 		Dimension d = new Dimension(68, 30);
 		portCombo.setMaximumSize(d);
@@ -79,11 +81,16 @@ public class SerialPanel extends JPanel {
 			}
 		});
 		
-		serialPanel.add(serialStart, "west, gapleft 10");
-		serialPanel.add(serialStop, "west");
-		serialPanel.add(portCombo, "west, gapright 10");
-		serialPanel.add(sensor,"west, gapright 18, gapleft 14");
-
+		JPanel comboPanel = new JPanel(new MigLayout());
+		comboPanel.add(serialStart, "west");
+		comboPanel.add(serialStop, "west");
+		comboPanel.add(portCombo, "west, gapright 10");
+		comboPanel.add(sensor,"west, gapright 15, gapleft 14");
+		
+		containerPanel.add(comboPanel, "wrap");
+		containerPanel.add(loadFeedPanel(), "wrap");
+		
+		add(containerPanel);
 	}
 	
 	private JPanel loadFeedPanel() {
@@ -124,7 +131,7 @@ public class SerialPanel extends JPanel {
 		if (reader == null && timerModbus == null) {
 			timerModbus = new Timer();
 			reader = new ModbusReader((String) portCombo.getSelectedItem(),
-					settingsDialog.getBaud(), 8, 1);
+					params.getBaud(), 8, 1);
 			reader.sendRequest();
 			if (reader.getResponse() != null) {
 				sendScheduledRequest(reader);
@@ -193,12 +200,10 @@ public class SerialPanel extends JPanel {
 		};
 		
 		timerModbus.schedule(task, 0, 200);
+	}
+
+	public void setVideoParams(VideoParams params) {
+		this.params = params;
 	}	
-	
-	
-	
-	
-	
-	
 	
 }

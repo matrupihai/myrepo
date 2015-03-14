@@ -32,11 +32,11 @@ public class LocationPanel extends JPanel {
 		radioGroup.add(radioManual);
 		radioGroup.add(radioAuto);
 
-		JTextField fieldLatitude = new JTextField(10);
-		JTextField fieldLongitude = new JTextField(10);
-		fieldTown = new JTextField(14);
-		JTextField fieldCounty = new JTextField(14);
-		JTextField fieldBeneficiary = new JTextField(14);
+		JTextField fieldLatitude = new JTextField(13);
+		JTextField fieldLongitude = new JTextField(13);
+		fieldTown = new JTextField(13);
+		JTextField fieldCounty = new JTextField(13);
+		JTextField fieldBeneficiary = new JTextField(13);
 
 		add(labelCoord, "wrap");
 		add(labelLatitude, "wrap");
