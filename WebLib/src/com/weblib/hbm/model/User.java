@@ -13,6 +13,8 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import org.codehaus.jackson.annotate.JsonBackReference;
+
 @Entity
 @Table (name = "DBA.\"105_USERS\"")
 public class User {
@@ -30,6 +32,7 @@ public class User {
 	@Column (name = "user_phone")
 	private String userPhone;
 	
+	@JsonBackReference
 	@OneToMany (fetch = FetchType.LAZY, mappedBy = "user", cascade = CascadeType.ALL)
 	private Set<Loan> loans = new HashSet<Loan>(); 
 	

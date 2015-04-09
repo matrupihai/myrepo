@@ -1,8 +1,8 @@
 package com.weblib.dao;
 
+import java.util.Collection;
 import java.util.List;
 
-import com.weblib.hbm.model.Book;
 import com.weblib.hbm.model.Loan;
 import com.weblib.hbm.model.User;
 
@@ -20,15 +20,9 @@ public class UserDAOImpl extends GenericDAOImpl<User, Integer> {
 		return findById(id);
 	}
 
-	public List<Book> findBooksBorrowedByUser(Integer id) {
+	public Collection<Loan> findBorrowedByUser(Integer id) {
 		User user = findUserById(id);
-		for (Loan loan : user.getLoans()) {
-			//TODO
-		}
-		
-		return null;
+		return user.getLoans();
 	}
-	
-	
 	
 }

@@ -1,6 +1,6 @@
 package com.weblib.hbm.model;
 
-import java.sql.Date;
+import java.util.Date;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -16,7 +16,7 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
-import org.codehaus.jackson.annotate.JsonIgnore;
+import org.codehaus.jackson.annotate.JsonManagedReference;
 
 @Entity
 @Table (name = "DBA.\"106_LOANS\"")
@@ -26,17 +26,18 @@ public class Loan {
 	@GeneratedValue (strategy = GenerationType.AUTO)
 	private int loanId;
 	
+	@Column (name = "due_date")
 	@Temporal (TemporalType.TIMESTAMP)
 	private Date dueDate;
 	
-	@JsonIgnore
+	@JsonManagedReference
 	@ManyToOne (fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	@JoinColumn (name = "user_id")
 	private User user;
 	
-	@JsonIgnore
 	@OneToOne (fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	@JoinColumn (name = "copy_id")
+	@JsonManagedReference
 	private BookCopy bookCopy;
 	
 	public Loan() {

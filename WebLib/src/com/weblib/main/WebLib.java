@@ -1,6 +1,5 @@
 package com.weblib.main;
 
-import com.weblib.dao.AuthorDAOImpl;
 import com.weblib.dao.BookDAOImpl;
 import com.weblib.dao.PublisherDAOImpl;
 import com.weblib.hbm.model.Author;
@@ -8,6 +7,9 @@ import com.weblib.hbm.model.Book;
 import com.weblib.hbm.model.Publisher;
 
 public class WebLib {
+	
+	public WebLib() {}
+	
 	
 	public static void main(String[] args) {
 //		findBooksByAuthor("osbuc");

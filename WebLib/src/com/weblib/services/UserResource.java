@@ -6,9 +6,9 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 
 import com.weblib.dao.UserDAOImpl;
-import com.weblib.json.JsonHelper;
 
 @Path("/users")
 public class UserResource {
@@ -16,26 +16,26 @@ public class UserResource {
 	
 	@GET
 	@Produces (MediaType.APPLICATION_JSON)
-	public String getAllUsers(@QueryParam ("title") String userName) {
+	public Response getAllUsers(@QueryParam ("userName") String userName) {
 		if (userName != null) {
-			return JsonHelper.objectToJson(dao.findByName(userName));
+			return Response.ok(dao.findByName(userName)).build();
 		}
 		
-		return JsonHelper.objectToJson(dao.findAllUsers());
+		return Response.ok(dao.findAllUsers()).build();
 	}
 	
 	@GET
 	@Produces (MediaType.APPLICATION_JSON)
 	@Path ("{id}")
-	public String getUserById(@PathParam("id") Integer id) {
-		return JsonHelper.objectToJson(dao.findUserById(id));
+	public Response getUserById(@PathParam("id") Integer id) {
+		return Response.ok(dao.findUserById(id)).build();
 	}
 	
 	@GET
 	@Produces (MediaType.APPLICATION_JSON)
-	@Path ("{id}/loans")
-	public String getLoansByUserId(@PathParam("id") Integer id) {
-		return JsonHelper.objectToJson(dao.findBooksBorrowedByUser(id));
+	@Path ("{id}/copies")
+	public Response getBorrowedByUser(@PathParam("id") Integer id) {
+		return Response.ok(dao.findBorrowedByUser(id)).build();
 	}
 	
 }
