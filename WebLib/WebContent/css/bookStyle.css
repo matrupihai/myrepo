@@ -1,0 +1,73 @@
+@CHARSET "ISO-8859-1";
+
+body {
+	background-color: #EEE;
+	margin: 0px;
+	padding: 0px;
+}
+
+.booksContainer {
+	margin: 40px auto;
+}
+
+.bookCard {
+	margin: 0px auto;
+	background-color: #FFF;
+	width: 500px;
+	height: 200px;
+	overflow: visible;
+    box-shadow: 0px 0px 3px #BBB;
+}
+
+.bookImg img {
+	width: 85px;
+	height: 160px;
+}
+
+.bookImg {
+	float: right;
+	margin: 20px; 
+}
+
+.bookHeader {
+	width: 375px;
+	height: 80px;
+}
+
+.bookTitle {
+	font-family: Arial;
+	font-size: 36px;
+	margin: 0px;
+	color: #59a5c8;
+	padding: 4px 0 0 10px;
+}
+
+.bookAuthor {
+	font-family: Arial;
+	font-size: 20px;
+	color: #59a5c8;
+	padding: 0 0 0 12px;
+	margin: 0px;
+}
+
+.bookPages {
+	float: right;
+	font-size: 20px;
+	color: #59a5c8;
+}
+
+.bookDescription {
+	margin: 0px;
+	padding: 0 0 0 12px;
+	text-align: justify;
+}
+
+
+
+
+
+
+
+
+
+
