@@ -16,7 +16,7 @@ import com.weblib.hbm.util.HibernateUtil;
 
 public class GenericDAOImpl<T, ID> implements GenericDAO<T, ID> {
 	private Logger log = Logger.getLogger(GenericDAOImpl.class);
-	Session session = HibernateUtil.getSessionFactory().openSession();
+	Session session = HibernateUtil.getSessionFactory().getCurrentSession();
 	private Class<T> objectType;
 	
 	public GenericDAOImpl() {

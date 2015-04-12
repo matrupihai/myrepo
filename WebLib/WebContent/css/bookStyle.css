@@ -11,55 +11,65 @@ body {
 }
 
 .bookCard {
-	margin: 0px auto;
+	margin: 5px auto;
 	background-color: #FFF;
 	width: 500px;
-	height: 200px;
-	overflow: visible;
+	height: auto;  
     box-shadow: 0px 0px 3px #BBB;
 }
 
+.bookActions {
+	width: inherit;
+	height: 40px;
+	border-top: 1px solid #999;
+}
+
 .bookImg img {
-	width: 85px;
-	height: 160px;
+	width: 80px;
+	height: 120px;
 }
 
 .bookImg {
 	float: right;
-	margin: 20px; 
+	width: 80px;
+	height: 120px;
+	padding: 10px;
 }
 
 .bookHeader {
-	width: 375px;
-	height: 80px;
+	width: 420px;
+	height: 60px;
+	color: #777;
+    padding: 10px 0 0 10px;
 }
 
 .bookTitle {
 	font-family: Arial;
-	font-size: 36px;
+	font-size: 30px;
 	margin: 0px;
-	color: #59a5c8;
-	padding: 4px 0 0 10px;
 }
 
 .bookAuthor {
 	font-family: Arial;
-	font-size: 20px;
-	color: #59a5c8;
-	padding: 0 0 0 12px;
+	font-size: 18px;
+	line-height: 18px;
 	margin: 0px;
 }
 
 .bookPages {
 	float: right;
-	font-size: 20px;
-	color: #59a5c8;
+	color: #999;
+	font-size: 14px;
 }
 
 .bookDescription {
 	margin: 0px;
-	padding: 0 0 0 12px;
+	font-family: Arial;
+	font-size: 12px;
 	text-align: justify;
+	color: #999;
+	height: 60px;
+	padding: 0 0 10px 10px;
 }
 
 
