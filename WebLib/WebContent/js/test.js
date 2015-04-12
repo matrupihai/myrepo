@@ -30,13 +30,19 @@ function renderBooksList(data) {
 
 function renderBook(book) {
 	bookString = "";
+	bookAuthors = "";
+	
+	$.each(book.authors, function(i, author) {
+		bookAuthors += ", " + author.authorName;
+	});
+	
 	bookString += "<div class=\"bookCard\">";
 	bookString += "<div class=\"bookImg\">";
 	bookString += "<img alt=\"bookImg\" src=\"img/imgStub.png\" />";
 	bookString += "</div>";
 	bookString += "<div class=\"bookHeader\">";
 	bookString += "<h1 class=\"bookTitle\">" + book.title + "</h1>";
-	bookString += "<p class=\"bookAuthor\">" + "John Doe";
+	bookString += "<p class=\"bookAuthor\">" + bookAuthors;
 	bookString += "<span class=\"bookPages\">" + book.noOfPages + "</span></p></div>";
 	bookString += "<p class=\"bookDescription\">" + loremIpsum + "</p>";
 	bookString += "<div class=\"bookActions\"></div></div>";
