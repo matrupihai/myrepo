@@ -1,6 +1,5 @@
 
 var booksUrl = "http://localhost:8080/WebLib/books";
-var bookString = "";
 var loremIpsum = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. " +
 "Suspendisse dapibus cursus eros. Nunc euismod nisl sed dapibus feugiat. " +
 "Nullam at metus et turpis dictumelementum.";
@@ -10,7 +9,7 @@ $("document").ready(
 );
 
 function findAllBooks() {
-	console.log("findAll");
+	console.log("findAllBooks");
 	$.ajax({
 		type: "GET",
 		url: booksUrl,
@@ -22,18 +21,16 @@ function findAllBooks() {
 function renderBooksList(data) {
 	var newData = data == null ? [] : (data instanceof Array ? data : [data]);
 	$.each(newData, function(i, book) {
-		renderBook(book)
-		console.log(bookString);
-		$(".booksContainer").append(bookString);
+		$(".booksContainer").append(renderBook(book));
 	});
 }
 
 function renderBook(book) {
-	bookString = "";
-	bookAuthors = "";
+	var bookString = "";
+	var bookAuthors = [];
 	
 	$.each(book.authors, function(i, author) {
-		bookAuthors += ", " + author.authorName;
+		bookAuthors.push(author.authorName);
 	});
 	
 	bookString += "<div class=\"bookCard\">";
@@ -42,9 +39,11 @@ function renderBook(book) {
 	bookString += "</div>";
 	bookString += "<div class=\"bookHeader\">";
 	bookString += "<h1 class=\"bookTitle\">" + book.title + "</h1>";
-	bookString += "<p class=\"bookAuthor\">" + bookAuthors;
-	bookString += "<span class=\"bookPages\">" + book.noOfPages + "</span></p></div>";
+	bookString += "<p class=\"bookAuthor\">" + bookAuthors.toString();
+	bookString += "<span class=\"bookPages\">" + book.noOfPages + " pages</span></p></div>";
 	bookString += "<p class=\"bookDescription\">" + loremIpsum + "</p>";
 	bookString += "<div class=\"bookActions\"></div></div>";
+	
+	return bookString;
 }
 
