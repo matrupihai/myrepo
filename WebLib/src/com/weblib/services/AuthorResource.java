@@ -20,7 +20,7 @@ public class AuthorResource {
 		if (authorName != null) {
 			return Response.ok(dao.findAuthorByName(authorName)).build();
 		}
-		return Response.ok(dao.findAllAuthors()).header("Access-Control-Allow-Origin", "*").build();
+		return Response.ok(dao.findAllAuthors()).build();
 	}
 	
 	@GET

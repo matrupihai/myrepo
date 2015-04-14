@@ -5,7 +5,7 @@ var loremIpsum = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. " +
 "Nullam at metus et turpis dictumelementum.";
 
 $("document").ready(
-		findAllBooks()
+	findAllBooks()
 );
 
 function findAllBooks() {
@@ -26,24 +26,81 @@ function renderBooksList(data) {
 }
 
 function renderBook(book) {
-	var bookString = "";
 	var bookAuthors = [];
 	
 	$.each(book.authors, function(i, author) {
 		bookAuthors.push(author.authorName);
 	});
 	
-	bookString += "<div class=\"bookCard\">";
-	bookString += "<div class=\"bookImg\">";
-	bookString += "<img alt=\"bookImg\" src=\"img/imgStub.png\" />";
-	bookString += "</div>";
-	bookString += "<div class=\"bookHeader\">";
-	bookString += "<h1 class=\"bookTitle\">" + book.title + "</h1>";
-	bookString += "<p class=\"bookAuthor\">" + bookAuthors.toString();
-	bookString += "<span class=\"bookPages\">" + book.noOfPages + " pages</span></p></div>";
-	bookString += "<p class=\"bookDescription\">" + loremIpsum + "</p>";
-	bookString += "<div class=\"bookActions\"></div></div>";
+	var bookCard = $("<div/>", {
+		class: "bookCard"
+	});
 	
-	return bookString;
+	var bookHeader = $("<div/>", {
+		class: "bookHeader"
+	});
+	
+	var bookTitle = $("<h1/>", {
+		class: "bookTitle",
+		html: book.title
+	});
+	
+	var bookAuthor = $("<p/>", {
+		class: "bookAuthor",
+		html: bookAuthors.toString()
+	});
+	
+	var bookPages = $("<span/>", {
+		class: "bookPages",
+		html: book.noOfPages + " pages"
+	});
+	
+	var bookImg = $("<div/>", {
+		class: "bookImg",
+		html: "<img alt=\"bookImg\" src=\"img/imgStub.png\" />"
+	});
+	
+	var bookDescription = $("<p/>", {
+		class: "bookDescription",
+		html: loremIpsum
+	});
+	
+	var bookActions = $("<div/>", {
+		class: "bookActions"
+	});
+	
+	var borrowBook = $("<a/>", {
+		id: "borrowBook",
+		href: "#",
+		html: "Borrow"
+	});
+	
+	bookImg.appendTo(bookCard);
+	bookHeader.appendTo(bookCard);
+	bookTitle.appendTo(bookHeader);
+	bookAuthor.appendTo(bookHeader);
+	bookPages.appendTo(bookAuthor);
+	bookDescription.appendTo(bookCard);
+	bookActions.appendTo(bookCard);
+	borrowBook.appendTo(bookActions);
+	jQuery.data(bookCard, book);
+	
+	return bookCard;
 }
+
+$("document").ready(function() {
+	$("#borrowBook").click(function(event) {
+		alert("Hello!");
+		var book = $(this).closest(".bookCard").data(); 
+		alert(book.yearPublished);
+	});
+});
+
+
+
+
+
+
+
+
 

@@ -23,7 +23,7 @@ public class BookResource {
 			return Response.ok(dao.findBookByTitle(title)).build();
 		}
 		
-		return Response.ok(dao.getAllBooks()).header("Access-Control-Allow-Origin", "*").build();
+		return Response.ok(dao.getAllBooks()).build();
 	}
 	
 	@GET
