@@ -24,12 +24,15 @@ body {
 	border-top: 1px solid #BBB;
 }
 
-#borrowBook {
+.borrowBook  {
 	text-decoration: none;
 	font-size: 24px;
 	font-family: Arial;
 	color: #BBB;
-	padding: 10px;
+	background: none !important;
+	border: none;
+	padding: 6px;
+	cursor:pointer
 }
 
 .bookImg img {
