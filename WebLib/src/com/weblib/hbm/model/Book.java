@@ -43,18 +43,18 @@ public class Book {
 	private int yearPublished;
 	
 	@JsonIgnore
-	@ManyToOne (fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@ManyToOne (fetch = FetchType.EAGER, cascade = CascadeType.ALL)
 	@JoinColumn (name = "publisher_id")
 	private Publisher publisher;
 	
 	@JsonManagedReference
-	@ManyToMany (fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@ManyToMany (fetch = FetchType.EAGER, cascade = CascadeType.ALL)
 	@JoinTable (name = "DBA.\"103_BOOKS_AUTHORS\"", joinColumns = @JoinColumn (name = "isbn"), 
 				inverseJoinColumns = @JoinColumn (name = "author_id"))
 	private Set<Author> authors = new HashSet<Author>();
 	
 	@JsonIgnore
-	@ManyToMany (fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@ManyToMany (fetch = FetchType.EAGER, cascade = CascadeType.ALL)
 	@JoinTable (name = "DBA.\"108_BOOKS_SUBJECTS\"", joinColumns = @JoinColumn (name = "isbn"), 
 				inverseJoinColumns = @JoinColumn (name = "subject_id"))
 	private Set<Subject> subjects = new HashSet<Subject>();

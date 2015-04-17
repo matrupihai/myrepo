@@ -5,18 +5,17 @@ import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.log4j.Logger;
 import org.hibernate.Criteria;
 import org.hibernate.Query;
 import org.hibernate.Session;
+import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 import org.hibernate.criterion.Restrictions;
 
 import com.weblib.hbm.util.HibernateUtil;
 
 public class GenericDAOImpl<T, ID> implements GenericDAO<T, ID> {
-	private Logger log = Logger.getLogger(GenericDAOImpl.class);
-	Session session = HibernateUtil.getSessionFactory().getCurrentSession();
+	SessionFactory sessionFactory = HibernateUtil.getSessionFactory();
 	private Class<T> objectType;
 	
 	public GenericDAOImpl() {
@@ -28,6 +27,7 @@ public class GenericDAOImpl<T, ID> implements GenericDAO<T, ID> {
 	public void insert(T entity) {
 		Transaction transaction = null;
 		try {
+			Session session = getSession();
 			transaction = session.beginTransaction();
 			session.save(entity);
 			session.getTransaction().commit();
@@ -35,7 +35,7 @@ public class GenericDAOImpl<T, ID> implements GenericDAO<T, ID> {
 			if (transaction != null) {
 				transaction.rollback();
 			}
-			log.error(e);
+			e.printStackTrace();
 		}
 	}
 	
@@ -43,11 +43,13 @@ public class GenericDAOImpl<T, ID> implements GenericDAO<T, ID> {
 	public List<T> findAll() {
 		List<T> list = new ArrayList<T>();
 		try {
+			Session session = getSession();
 			session.beginTransaction();
 			Query query = session.createQuery("from " + objectType.getSimpleName());
-			list.addAll(query.list()); 
+			list.addAll(query.list());
+			session.getTransaction().commit();
 		} catch (Exception e) {
-			log.error(e);
+			e.printStackTrace();
 		} 
 		
 		return list;
@@ -56,11 +58,13 @@ public class GenericDAOImpl<T, ID> implements GenericDAO<T, ID> {
 	public List<T> genericFind(String queryString) {
 		List<T> list = new ArrayList<T>();
 		try {
+			Session session = getSession();
 			session.beginTransaction();
 			Query query = session.createQuery(queryString);
-			list.addAll(query.list()); 
+			list.addAll(query.list());
+			session.getTransaction().commit();
 		} catch (Exception e) {
-			log.error(e);
+			e.printStackTrace();
 		} 
 		
 		return list;
@@ -87,14 +91,8 @@ public class GenericDAOImpl<T, ID> implements GenericDAO<T, ID> {
 		}
 	}
 	
-	public Session getSession() {
-		return session;
-	}
-	
-	public void closeSession() {
-		if (session != null && session.isOpen()) {
-			session.close();
-		}
+	private Session getSession() {
+		return sessionFactory.getCurrentSession();
 	}
 	
 }
