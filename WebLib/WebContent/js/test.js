@@ -18,6 +18,23 @@ function findAllBooks() {
 	});
 }
 
+function findCopies(url) {
+	$.ajax({
+		type: "GET",
+		url: url,
+		dataType: "json",
+		success: logToConsole
+	});
+}
+
+function logToConsole(data) {
+	var newData = data == null ? [] : (data instanceof Array ? data : [data]);
+	$.each(newData, function(i, copy) {
+		var jsonCopy = JSON.stringify(copy);
+		console.log(jsonCopy);
+	});
+}
+
 function renderBooksList(data) {
 	var newData = data == null ? [] : (data instanceof Array ? data : [data]);
 	$.each(newData, function(i, book) {
@@ -93,7 +110,8 @@ function renderBook(book) {
 $(document).on("click", ".borrowBook", function(event) {
 	var bookCard = $(event.target).closest(".bookCard"); 
 	var bookJson = JSON.parse(jQuery.data(bookCard[0], "bookModel")); 
-	console.log(bookJson.yearPublished);
+	var bookIsbn = bookJson.isbn;
+	findCopies(booksUrl + "/" + bookIsbn + "/copies")
 });
 
 
