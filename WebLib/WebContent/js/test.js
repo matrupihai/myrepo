@@ -18,21 +18,14 @@ function findAllBooks() {
 	});
 }
 
-function findCopies(url) {
+function findCopies(copiesUrl) {
 	$.ajax({
 		type: "GET",
-		url: url,
+		url: copiesUrl,
 		dataType: "json",
-		success: logToConsole
+		success: renderBookCopies
 	});
-}
-
-function logToConsole(data) {
-	var newData = data == null ? [] : (data instanceof Array ? data : [data]);
-	$.each(newData, function(i, copy) {
-		var jsonCopy = JSON.stringify(copy);
-		console.log(jsonCopy);
-	});
+	
 }
 
 function renderBooksList(data) {
@@ -51,6 +44,8 @@ function renderBook(book) {
 	$.each(book.authors, function(i, author) {
 		bookAuthors.push(author.authorName);
 	});
+	
+	var copiesLength = getCopies(book).length;
 
 	var bookCard = $("<div/>", {
 		class: "bookCard"
@@ -94,7 +89,12 @@ function renderBook(book) {
 		type: "button",	
 		html: "Borrow"
 	});
-
+	
+	var bookCopies = $("<p/>", {
+		class: "copies",
+		html: "Available copies: " + copiesLength	
+	});
+	
 	bookImg.appendTo(bookCard);
 	bookHeader.appendTo(bookCard);
 	bookTitle.appendTo(bookHeader);
@@ -103,15 +103,25 @@ function renderBook(book) {
 	bookDescription.appendTo(bookCard);
 	bookActions.appendTo(bookCard);
 	borrowBook.appendTo(bookActions);
-
+	bookCopies.appendTo(bookActions);
+	
 	return bookCard;
 }
 
+function getCopies(book) {
+	var bookIsbn = book.isbn;
+	var copiesUrl = booksUrl + "/" + bookIsbn + "/copies";
+	
+	var copiesArray = copies != null ? copies : [];
+	
+	return copiesArray;
+}
+
+
 $(document).on("click", ".borrowBook", function(event) {
 	var bookCard = $(event.target).closest(".bookCard"); 
-	var bookJson = JSON.parse(jQuery.data(bookCard[0], "bookModel")); 
-	var bookIsbn = bookJson.isbn;
-	findCopies(booksUrl + "/" + bookIsbn + "/copies")
+	var bookJson = JSON.parse(jQuery.data(bookCard[0], "bookModel"));
+	console.log("Borrow pressed")
 });
 
 
