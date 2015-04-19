@@ -11,6 +11,7 @@ public class ResponseFilter implements ContainerResponseFilter {
 	public ContainerResponse filter(ContainerRequest request,
 			ContainerResponse response) {
 		response.getHttpHeaders().putSingle("Access-Control-Allow-Origin", "*");
+		System.out.println("Response headers modified.");
 		
 		return response;
 	}

@@ -21,8 +21,6 @@ public class SessionRequestFilter implements Filter {
 	public void doFilter(ServletRequest request, ServletResponse response,
 			FilterChain filterChain) throws IOException, ServletException {
         try {
-        	System.out.println("Filter chain.");
-        	sessionFactory = HibernateUtil.getSessionFactory();
         	sessionFactory.getCurrentSession().beginTransaction(); 
 			filterChain.doFilter(request, response);
 			sessionFactory.getCurrentSession().getTransaction().commit();
@@ -44,7 +42,7 @@ public class SessionRequestFilter implements Filter {
 	
 	@Override
 	public void init(FilterConfig config) throws ServletException {
-		
+		sessionFactory = HibernateUtil.getSessionFactory();
 	}
 	
 	@Override

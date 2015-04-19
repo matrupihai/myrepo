@@ -44,10 +44,8 @@ public class GenericDAOImpl<T, ID> implements GenericDAO<T, ID> {
 		List<T> list = new ArrayList<T>();
 		try {
 			Session session = getSession();
-			session.beginTransaction();
 			Query query = session.createQuery("from " + objectType.getSimpleName());
 			list.addAll(query.list());
-			session.getTransaction().commit();
 		} catch (Exception e) {
 			e.printStackTrace();
 		} 
@@ -59,10 +57,8 @@ public class GenericDAOImpl<T, ID> implements GenericDAO<T, ID> {
 		List<T> list = new ArrayList<T>();
 		try {
 			Session session = getSession();
-			session.beginTransaction();
 			Query query = session.createQuery(queryString);
 			list.addAll(query.list());
-			session.getTransaction().commit();
 		} catch (Exception e) {
 			e.printStackTrace();
 		} 
@@ -79,10 +75,12 @@ public class GenericDAOImpl<T, ID> implements GenericDAO<T, ID> {
 	
 	public T findById(ID id) {
 		checkId(id);
-		Criteria crit = getSession().createCriteria(objectType);
+		Session session = getSession();
+		Criteria crit = session.createCriteria(objectType);
         crit.add(Restrictions.idEq(id));
+        T result = (T) crit.uniqueResult(); 
         
-        return (T) crit.uniqueResult();
+        return result;
 	}
 	
 	public void checkId(ID id) {
