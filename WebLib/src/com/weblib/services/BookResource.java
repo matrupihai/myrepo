@@ -1,5 +1,7 @@
 package com.weblib.services;
 
+import java.util.Set;
+
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
@@ -11,6 +13,7 @@ import javax.ws.rs.core.Response;
 import com.jayway.jaxrs.hateoas.core.HateoasResponse;
 import com.weblib.dao.BookDAOImpl;
 import com.weblib.hbm.model.Book;
+import com.weblib.hbm.model.BookCopy;
 
 @Path ("/books")
 public class BookResource {
@@ -38,7 +41,8 @@ public class BookResource {
 	@Produces (MediaType.APPLICATION_JSON)
 	@Path ("{isbn}/copies")
 	public Response getBookCopies(@PathParam("isbn") Integer isbn) {
-		return Response.ok(dao.findBookCopies(isbn)).build();
+		Set<BookCopy> result = dao.findBookCopies(isbn);
+		return Response.ok(result).header("result-count", result.size()).build();
 	}
 	
 }
